@@ -77,6 +77,7 @@ backup terjadwal.
 ## Isi lain di repo
 
 - `CLAUDE.md`: memori proyek untuk Claude Code (keputusan, aturan kerja, peta kode).
-- `model/`: model HTML asli Mas Gilang dan `seed.json` (sumber `seed_data.json`).
+- `model/`: model HTML asli Mas Gilang dan `seed.json` (sumber `seed_data.json`). Bisa dijalankan sendiri dengan
+  `node server.js` (http://localhost:8080); cara pakai dan catatan perubahannya ada di `model/README.md`.
 - `docs/`: IT hand-over, mockup v0.3, tautan PRD.
 - `tools/gen_seed.py`: pembuat ulang data contoh.
