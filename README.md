@@ -31,6 +31,12 @@ Dari mockup v0.3 (11 Nov 2026):
 
 ## Jalankan di laptop (development)
 
+Cara paling gampang: klik dua kali **`jalankan.bat`**. Pertama kali ia menyiapkan semuanya sendiri
+(lingkungan Python, library, `.env` dengan jam demo, data contoh), lalu membuka browser.
+Syaratnya hanya Python 3.14 dan Git sudah terpasang.
+
+Cara manual:
+
 ```bash
 python -m venv .venv
 .venv\Scripts\python -m pip install -r requirements.txt
@@ -49,7 +55,7 @@ Buka http://127.0.0.1:5100. Akun demo (password `demo123`, dari `seed.py`):
 | Manajemen | `direktur` |
 | Admin | `admin` |
 
-Data contoh semuanya dummy ("(sample)"). Untuk mengisi ulang: hapus `instance/crm.db`, jalankan `seed` lagi.
+Data contoh semuanya dummy ("(sample)"). Untuk mengisi ulang: hapus `instance/crm.db`, lalu klik `jalankan.bat` lagi.
 
 ## Produksi (PC Surabaya)
 
