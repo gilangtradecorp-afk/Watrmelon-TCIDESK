@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% from "_m.html" import csrf %}
+{% block main %}
+<div class="top"><div><h1>Catat enquiry</h1><div class="sub">Email langsung dan WhatsApp wajib dicatat. Pencatatan masuk hitungan KPI.</div></div></div>
+{% for b in blocked %}<div class="alert"><b>Belum bisa ambil enquiry baru:</b> <a class="mono" href="{{ url_for('enquiries.detail', eid=b.id) }}">{{ b.enq_no }}</a> belum dihubungi lewat 4 jam kerja. Hubungi dulu, atau minta RM mencatatkan enquiry baru ini.</div>{% endfor %}
+<form method="post" class="card" style="display:flex;flex-direction:column;gap:12px">{{ csrf() }}
+ <div class="form2">
+  <div class="fr"><label for="source">Sumber</label><select id="source" name="source">{% for s in SOURCES %}<option {{ 'selected' if f.source == s }}>{{ s }}</option>{% endfor %}</select></div>
+  <div class="fr"><label for="seller">Pemilik (sales)</label><select id="seller" name="seller">{% for p in sellers %}<option value="{{ p.code }}" {{ 'selected' if f.seller == p.code }}>{{ p.name }} · {{ p.code }} · {{ p.region }}</option>{% endfor %}</select></div>
+  <div class="fr"><label for="company">Perusahaan *</label><input id="company" name="company" value="{{ f.company or '' }}" required></div>
+  <div class="fr"><label for="contact">Nama kontak</label><input id="contact" name="contact" value="{{ f.contact or '' }}"></div>
+  <div class="fr"><label for="phone">Telepon / WA</label><input id="phone" name="phone" value="{{ f.phone or '' }}"></div>
+  <div class="fr"><label for="email">Email</label><input id="email" name="email" type="email" value="{{ f.email or '' }}"></div>
+  <div class="fr"><label for="line">Lini bisnis</label><select id="line" name="line">{% for s in LINES %}<option {{ 'selected' if f.line == s }}>{{ s }}</option>{% endfor %}</select></div>
+  <div class="fr"><label for="type">Retail / proyek</label><select id="type" name="type">{% for s in TYPES %}<option {{ 'selected' if f.type == s }}>{{ s }}</option>{% endfor %}</select></div>
+  <div class="fr"><label for="product">Produk yang dibutuhkan *</label><input id="product" name="product" value="{{ f.product or '' }}" required></div>
+  <div class="fr"><label for="qty">Jumlah</label><input id="qty" name="qty" value="{{ f.qty or '' }}"></div>
+  <div class="fr"><label for="location">Lokasi</label><input id="location" name="location" value="{{ f.location or '' }}"></div>
+  <div class="fr"><label for="date_needed">Dibutuhkan kapan</label><input id="date_needed" name="date_needed" value="{{ f.date_needed or '' }}"></div>
+  <div class="fr"><label for="pricing_deadline">Harga dibutuhkan kapan</label><input id="pricing_deadline" name="pricing_deadline" value="{{ f.pricing_deadline or '' }}"></div>
+ </div>
+ <p class="note" style="margin:0">Identitas belum dianggap terverifikasi walau datanya lengkap. Centang manual di KYC setelah dicek.</p>
+ <div class="row"><button class="b">Buat enquiry</button><a class="b g" href="{{ url_for('enquiries.index') }}">Batal</a></div>
+</form>
+{% endblock %}

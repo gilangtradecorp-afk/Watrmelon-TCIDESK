@@ -1,0 +1,26 @@
+{% macro csrf() %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endmacro %}
+
+{% macro tier(e) %}<span class="t t{{ e.tier }}" title="Skor KYC {{ e.score }}">{{ 'PC' if e.tier == 'P' else e.tier }}</span>{% endmacro %}
+
+{% macro stage(e) -%}
+<span class="pill {{ 'ok' if e.status == 'Won' else 'mute' if e.status in ('Lost','Not prospectable') else '' }}">{{ e.stage if (e.is_open or e.status == 'Won') else e.status }}</span>
+{%- endmacro %}
+
+{% macro slap(s) %}{% if s and s.t %}<span class="pill {{ 'bad' if s.bad else 'ok' }}">{{ s.t }}</span>{% endif %}{% endmacro %}
+
+{% macro kpi(l, v, d='', bad=false) %}<div class="kpi{{ ' bad' if bad }}"><div class="l">{{ l }}</div><div class="v">{{ v }}</div><div class="d">{{ d|safe if d else '&nbsp;'|safe }}</div></div>{% endmacro %}
+
+{% macro enq_table(rows, sla, empty='Tidak ada data.') %}
+{% if rows %}<div class="scroll"><table>
+<tr><th>Tier</th><th>Nomor</th><th>Pelanggan</th><th>Produk</th><th>Tahap</th><th>SLA</th><th>Pemilik</th></tr>
+{% for e in rows %}<tr class="click" data-href="{{ url_for('enquiries.detail', eid=e.id) }}">
+<td>{{ tier(e) }}</td><td class="mono"><a href="{{ url_for('enquiries.detail', eid=e.id) }}">{{ e.enq_no }}</a></td><td>{{ e.customer.company }}</td><td>{{ e.product }}</td><td>{{ stage(e) }}</td><td>{{ slap(sla(e)) if e.is_open }}</td><td>{{ e.seller_code }}</td></tr>{% endfor %}
+</table></div>{% else %}<p class="note">{{ empty }}</p>{% endif %}
+{% endmacro %}
+
+{% macro bars(rows, mx) %}
+<div class="note"><span class="dot sD" style="margin-left:0"></span>Selesai<span class="dot sO"></span>Berjalan<span class="dot sL"></span>Telat</div>
+{% for d, n, c in rows %}<div class="hb"><span>{{ d }}</span><div class="trk"><i class="sD" style="width:{{ c.done / mx * 100 }}%"></i><i class="sO" style="width:{{ c.open / mx * 100 }}%"></i><i class="sL" style="width:{{ c.late / mx * 100 }}%"></i></div><b>{{ n }}</b></div>{% endfor %}
+{% endmacro %}
+
+{% macro msg_list(msgs) %}{% for m in msgs %}{% include "_message.html" %}{% endfor %}{% endmacro %}

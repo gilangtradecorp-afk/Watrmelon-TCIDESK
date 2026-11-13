@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Tradecorp CRM{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+{% if current_user.is_authenticated %}
+<div id="app">
+ <aside id="rail">
+  <div class="logo">TRADECORP CRM<small>{{ ROLES[current_user.role] }}{% if current_user.region %} · {{ current_user.region }}{% elif current_user.team %} · {{ current_user.team }}{% endif %}</small></div>
+  <nav id="nav">
+   {% for ep, label in NAV %}<a href="{{ url_for(ep) }}" class="{{ 'on' if request.endpoint == ep }}">{{ label }}</a>{% endfor %}
+   <a href="{{ url_for('chat.home') }}" class="{{ 'on' if request.endpoint and request.endpoint.startswith('chat.') }}">Chat tim {% if CHAT_UNREAD %}<span class="badge">{{ CHAT_UNREAD }}</span>{% endif %}</a>
+   <a href="{{ url_for('auth.notifications') }}" class="{{ 'on' if request.endpoint == 'auth.notifications' }}">Notifikasi {% if BELL %}<span class="badge">{{ BELL }}</span>{% endif %}</a>
+   {% if current_user.role == 'rm' %}<a href="{{ url_for('admin.holidays') }}" class="{{ 'on' if request.endpoint == 'admin.holidays' }}">Hari libur</a>{% endif %}
+  </nav>
+  <div class="who">
+   <b>{{ current_user.name }}</b>
+   <a href="{{ url_for('auth.password') }}" style="color:var(--rail-ink);font-size:12px">Ganti password</a>
+   <form method="post" action="{{ url_for('auth.logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button>Keluar</button></form>
+  </div>
+ </aside>
+ <main>
+  {% with msgs = get_flashed_messages(with_categories=true) %}{% for cat, m in msgs %}<div class="flash {{ cat if cat in ('ok','bad','warn') else 'ok' }}">{{ m }}</div>{% endfor %}{% endwith %}
+  {% block main %}{% endblock %}
+ </main>
+</div>
+{% else %}
+{% block bare %}{% endblock %}
+{% endif %}
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

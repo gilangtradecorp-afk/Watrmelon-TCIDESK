@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% from "_m.html" import kpi, tier, stage, bars as barchart %}
+{% block main %}
+<div class="top">
+ <div><h1>Meja {{ current_user.name }}</h1><div class="sub">{{ breaches|length + overdue + follow }} hal perlu tindakan</div></div>
+ <a class="b" href="{{ url_for('enquiries.new') }}">+ Catat enquiry</a>
+</div>
+{% for e in breaches %}<div class="alert"><b>SLA terlewat:</b> <a class="mono" href="{{ url_for('enquiries.detail', eid=e.id) }}">{{ e.enq_no }}</a> ({{ e.customer.company }}) – {{ S[e.id].t }}. Kontak pertama maksimal 4 jam kerja.{% if blocked and e.seller_code == current_user.code %} Anda belum bisa ambil enquiry baru sampai ini dihubungi.{% endif %}</div>{% endfor %}
+<div class="kpis">
+ {{ kpi('Enquiry baru hari ini', today, 'Bulan ini ' ~ mtd) }}
+ {{ kpi('Enquiry terbuka', op|length, 'A ' ~ tiers.A ~ ' · B ' ~ tiers.B ~ ' · C ' ~ (tiers.C + tiers.P)) }}
+ {{ kpi('Update status telat', overdue, 'aturan 3 hari kerja', overdue > 0) }}
+ {{ kpi('Follow-up penawaran', follow, 'komentar harian', follow > 0) }}
+ {{ kpi('Kontak pertama (30 hari)', fc|hrs if fc is not none else '–', 'target 4 jam') }}
+ {{ kpi('Win rate (90 hari)', pct(won, won + lost), won ~ ' menang · ' ~ won_value|rps) }}
+</div>
+<div class="grid2">
+ <div class="card span2"><h2>Tugas hari ini <small>yang telat dulu, lalu tier dan jatuh tempo · klik baris untuk membuka</small></h2>
+ {% if op %}<div class="scroll"><table>
+ <tr><th>Tier</th><th>Nomor</th><th>Pelanggan</th><th>Produk</th><th>Tahap</th><th>Aksi berikutnya</th><th>Jatuh tempo</th></tr>
+ {% for e in op %}{% set lbl = labels[e.id] %}<tr class="click" data-href="{{ url_for('enquiries.detail', eid=e.id) }}">
+  <td>{{ tier(e) }}</td><td class="mono"><a href="{{ url_for('enquiries.detail', eid=e.id) }}">{{ e.enq_no }}</a></td><td>{{ e.customer.company }}</td><td>{{ e.product }}</td><td>{{ stage(e) }}</td>
+  <td>{{ acts[e.id][0] }}</td><td>{% if lbl[0] %}<span class="pill {{ lbl[1] }}">{{ lbl[0] }}</span>{% endif %}</td></tr>{% endfor %}
+ </table></div>{% else %}<p class="note">Tidak ada yang terbuka. Catat enquiry untuk mulai.</p>{% endif %}</div>
+ <div class="card"><h2>Request saya ke tim <small>bulan ini</small></h2>{{ barchart(bars, mx) }}</div>
+</div>
+{% endblock %}

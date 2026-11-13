@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% from "_m.html" import csrf %}
+{% block main %}
+<div class="top"><div><h1>Hari libur</h1><div class="sub">Hari di daftar ini tidak dihitung sebagai jam kerja untuk SLA dan target tim.</div></div></div>
+<div class="card">{% if items %}<ul class="chk">{% for h in items %}<li><span class="mono">{{ h.day|day }}</span> {{ h.name }}
+ <form class="inline" method="post" style="margin-left:auto">{{ csrf() }}<input type="hidden" name="delete" value="{{ h.id }}"><button class="b g s">Hapus</button></form></li>{% endfor %}</ul>
+{% else %}<p class="note">Belum ada hari libur.</p>{% endif %}</div>
+<form method="post" class="card row">{{ csrf() }}
+ <div class="fr"><label for="d">Tanggal</label><input id="d" name="day" type="date" required></div>
+ <div class="fr" style="flex:1"><label for="n">Nama</label><input id="n" name="name" placeholder="Hari Raya ..."></div>
+ <button class="b" style="align-self:flex-end">Tambah</button></form>
+{% endblock %}

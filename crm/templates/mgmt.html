@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% from "_m.html" import kpi %}
+{% block main %}
+<div class="top"><div><h1>Penjualan perusahaan – semua region</h1><div class="sub">Hanya baca. Mengalihkan, menyetujui, dan mengubah tetap di RM.</div></div><div class="row"><span class="pill mute">Hanya baca</span><a class="b g" href="{{ url_for('sales.export') }}">Ekspor data (Excel)</a></div></div>
+{% set qo = namespace(v=0) %}{% for e in quotes_out %}{% set qo.v = qo.v + qv(e) %}{% endfor %}
+<div class="kpis">
+ {{ kpi('Enquiry bulan ini', m|length, 'Tier A ' ~ (m|selectattr('tier', 'equalto', 'A')|list|length)) }}
+ {{ kpi('Penawaran beredar', quotes_out|length, qo.v|rps) }}
+ {{ kpi('PO menang', won|length, won_value|rps) }}
+ {{ kpi('Kontak pertama (30 hari)', fc|hrs if fc is not none else '–', 'target 4 jam') }}
+ {{ kpi('Pelanggaran SLA terbuka', breaches, 'sales dan RM', breaches > 0) }}
+</div>
+<div class="grid2">
+<div class="col">
+ <div class="card"><h2>Perbandingan region <small>aturan sama untuk semua region</small></h2><div class="scroll"><table class="num">
+  <tr><th>Region</th><th>Enq. bulan ini</th><th>Tier A</th><th>Kontak 1 (30 hr)</th><th>Penawaran</th><th>Win rate (90 hr)</th><th>Nilai PO</th><th>Pelanggaran sales / RM</th></tr>
+  {% for r in rows %}<tr><td><b>{{ r.r }}</b> {{ r.name }}<br><span class="note">RM {{ r.rm }}</span></td><td>{{ r.mtd }}</td><td>{{ pct(r.tier_a, r.mtd) }}</td><td>{{ r.fc|hrs if r.fc is not none else '–' }}</td><td>{{ r.quotes }}</td><td>{{ pct(r.wn, r.wn + r.ls) }}</td><td>{{ r.po_value|rps }}</td><td>{{ r.b_sales }} / {{ r.b_rm }}</td></tr>{% endfor %}
+ </table></div></div>
+ <div class="card"><h2>Pipeline per tier <small>enquiry terbuka, nilai penawaran terakhir</small></h2><div class="scroll"><table class="num">
+  <tr><th>Tier</th><th>Enquiry</th><th>Nilai penawaran</th></tr>
+  {% for t, x in pipeline.items() %}<tr><td><span class="t t{{ t }}">{{ 'PC' if t == 'P' else t }}</span></td><td>{{ x.n }}</td><td>{{ x.v|rps }}</td></tr>{% endfor %}
+ </table></div>
+ <h2 style="margin-top:12px">Per tahap</h2><div class="scroll"><table class="num"><tr><th>Tahap</th><th>Enquiry</th><th>Nilai</th></tr>
+  {% for s, x in stages.items() %}<tr><td>{{ s }}</td><td>{{ x.n }}</td><td>{{ x.v|rps }}</td></tr>{% endfor %}
+ </table></div></div>
+</div>
+<div class="col">
+ {% set lm = [1] + loss|map(attribute=1)|list %}{% set lmax = lm|max %}
+ <div class="card"><h2>Alasan kalah (90 hari) <small>{{ lost_n }} enquiry Lost, alasan wajib diisi</small></h2>
+  {% for l, n in loss %}<div class="hb" style="grid-template-columns:130px minmax(0,1fr) 44px"><span>{{ l }}</span><div class="trk"><i class="sD" style="width:{{ n / lmax * 100 }}%"></i></div><b>{{ pct(n, lost_n) }}</b></div>{% endfor %}</div>
+ {% set sm = ([1] + src|map(attribute=1)|list)|max %}
+ <div class="card"><h2>Sumber enquiry <small>bulan ini</small></h2>
+  {% for l, n in src %}<div class="hb"><span>{{ l }}</span><div class="trk"><i class="sD" style="width:{{ n / sm * 100 }}%"></i></div><b>{{ n }}</b></div>{% endfor %}</div>
+ <div class="card"><h2>Alasan tidak prospek</h2>
+  {% for l, n in nprs %}<div class="hb" style="grid-template-columns:160px minmax(0,1fr) 34px"><span>{{ l }}</span><div class="trk"><i class="sD" style="width:{{ n / (([1] + nprs|map(attribute=1)|list)|max) * 100 }}%"></i></div><b>{{ n }}</b></div>{% endfor %}</div>
+</div>
+</div>
+{% endblock %}

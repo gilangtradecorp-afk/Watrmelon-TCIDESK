@@ -1,0 +1,61 @@
+{% extends "base.html" %}{% from "_m.html" import csrf, kpi, enq_table, tier %}
+{% block main %}
+<div class="top">
+ <div><h1>Kontrol region {{ reg }}</h1><div class="sub">{{ REGIONS[reg][0] }}</div></div>
+ <div class="row"><a class="b g" href="{{ url_for('sales.export') }}">Ekspor untuk rapat manajemen</a><a class="b" href="{{ url_for('enquiries.new') }}">+ Catat enquiry</a></div>
+</div>
+{% set src = [] %}{% for s in SOURCES %}{% set _ = src.append(s ~ ' ' ~ (m|selectattr('source', 'equalto', s)|list|length)) %}{% endfor %}
+{% set ta = m|selectattr('tier', 'equalto', 'A')|list|length %}
+<div class="kpis">
+ {{ kpi('Enquiry bulan ini', m|length, src|join(' · ')) }}
+ {{ kpi('Porsi Tier A', pct(ta, m|length), ta ~ ' dari ' ~ m|length) }}
+ {{ kpi('Pelanggaran SLA terbuka', breaches|length, 'kontak, update, atau follow-up', breaches|length > 0) }}
+ {{ kpi('Penawaran beredar', quotes_out|length, quotes_out_value|rps) }}
+ {{ kpi('PO menang', won|length, won_value|rps) }}
+</div>
+<div class="grid2">
+<div class="col">
+ <div class="card"><h2>Disiplin tim <small>jam kerja</small></h2><div class="scroll"><table class="num">
+  <tr><th>Sales</th><th>Terbuka</th><th>Kontak 1 (30 hr)</th><th>Update telat</th><th>Bukti diunggah</th><th>Urgent minggu ini</th><th>Win rate (90 hr)</th><th>Status</th></tr>
+  {% for t in team %}<tr><td><b>{{ t.p.name }}</b> {{ t.p.code }}{% if t.p.role == 'rm' %} <span class="pill mute">RM</span>{% endif %}</td><td>{{ t.open }}</td><td>{{ t.fc|hrs if t.fc is not none else '–' }}</td><td>{{ t.overdue }}</td><td>{{ pct(t.proof[0], t.proof[1]) }}</td><td>{{ t.urgent }}/{{ quota }}</td><td>{{ pct(t.wn, t.wn + t.ls) }}</td>
+   <td><span class="pill {{ 'bad' if t.breaches > 2 else 'warn' if t.breaches else 'ok' }}">{{ 'Tindak' if t.breaches > 2 else 'Pantau' if t.breaches else 'Aman' }}</span></td></tr>{% endfor %}
+ </table></div></div>
+
+ <div class="card"><h2>Perlu dialihkan <small>belum dihubungi lebih dari 8 jam kerja</small></h2>
+  {% for e in to_reassign %}<form class="row" method="post" action="{{ url_for('enquiries.reassign', eid=e.id) }}" style="padding:6px 0;border-bottom:1px solid var(--line)">{{ csrf() }}
+   <input type="hidden" name="next" value="{{ request.path }}">
+   {{ tier(e) }}<a class="mono" href="{{ url_for('enquiries.detail', eid=e.id) }}">{{ e.enq_no }}</a><span>{{ e.customer.company }}</span><span class="pill bad">{{ S[e.id].t }}</span><span class="note">di {{ e.seller_code }}</span>
+   <select name="to" aria-label="Alihkan ke">{% for p in sellers if p.code != e.seller_code %}<option value="{{ p.code }}">{{ p.name }}</option>{% endfor %}</select>
+   <button class="b s">Alihkan</button></form>
+  {% else %}<p class="note">Tidak ada. Semua enquiry baru dihubungi tepat waktu.</p>{% endfor %}
+ </div>
+
+ <div class="card"><h2>Tidak ada respons 7 hari <small>tutup sebagai Lost, bisa dibuka lagi</small></h2>
+  {% for e in autolost %}<form class="row" method="post" action="{{ url_for('enquiries.close_lost', eid=e.id) }}" style="padding:6px 0">{{ csrf() }}
+   <input type="hidden" name="next" value="{{ request.path }}">
+   <a class="mono" href="{{ url_for('enquiries.detail', eid=e.id) }}">{{ e.enq_no }}</a><span>{{ e.customer.company }}</span><span class="pill bad">{{ S[e.id].t }}</span><button class="b s">Tutup sebagai Lost</button></form>
+  {% else %}<p class="note">Tidak ada.</p>{% endfor %}
+ </div>
+</div>
+
+<div class="col">
+ <div class="card"><h2>Menunggu persetujuan <small>{{ urgent|length + po_wait|length + quotes_waiting|length + dup_reviews|length }}</small></h2>
+  {% for e in dup_reviews %}<div style="padding:6px 0;border-bottom:1px solid var(--line)"><b>Keputusan duplikat</b> · <a class="mono" href="{{ url_for('enquiries.detail', eid=e.id) }}">{{ e.enq_no }}</a><br><span class="note">{{ e.customer.company }} · enquiry baru dari {{ e.seller_code }}, pelanggan juga dipegang region lain</span>
+   <form class="row" method="post" action="{{ url_for('enquiries.dup_decide', eid=e.id) }}" style="margin-top:4px">{{ csrf() }}<input type="hidden" name="next" value="{{ request.path }}"><button class="b s" name="choice" value="keep">Tetap di {{ reg }}</button><button class="b g s" name="choice" value="handover">Serahkan ke region lain</button></form></div>{% endfor %}
+  {% for r in urgent %}<div style="padding:6px 0;border-bottom:1px solid var(--line)"><b>Request urgent {{ r.dept }}</b> · <a class="mono" href="{{ url_for('enquiries.detail', eid=r.enquiry_id) }}">{{ r.enquiry.enq_no }}</a><br><span class="note">{{ r.title }} · dari {{ r.seller_code }} · kuota urgent minggu ini {{ urgent_used(r.seller_code) }} dari {{ quota }}</span>
+   <div class="row" style="margin-top:4px">
+    <form class="inline" method="post" action="{{ url_for('hub.approve', rid=r.id) }}">{{ csrf() }}<input type="hidden" name="next" value="{{ request.path }}"><button class="b s">Setujui</button></form>
+    <form class="inline" method="post" action="{{ url_for('hub.reject_urgent', rid=r.id) }}">{{ csrf() }}<input type="hidden" name="next" value="{{ request.path }}"><button class="b g s">Tolak</button></form></div></div>{% endfor %}
+  {% for e in po_wait %}<div style="padding:6px 0;border-bottom:1px solid var(--line)"><b>Paket serah-terima PO</b> · <a class="mono" href="{{ url_for('enquiries.detail', eid=e.id) }}">{{ e.enq_no }}</a><br><span class="note">{{ e.customer.company }} · PO {{ e.po_number or '-' }} · {{ e.po_value|rp }} · dari {{ e.seller_code }}</span>
+   <div class="row" style="margin-top:4px"><form class="inline" method="post" action="{{ url_for('enquiries.po_approve', eid=e.id) }}">{{ csrf() }}<input type="hidden" name="next" value="{{ request.path }}"><button class="b s">Setujui, buka work order</button></form></div></div>{% endfor %}
+  {% for q in quotes_waiting %}<div style="padding:6px 0;border-bottom:1px solid var(--line)"><b>Diskon penawaran {{ q.discount_pct|round(1) }}%</b> · <a class="mono" href="{{ url_for('enquiries.detail', eid=q.enquiry_id) }}">{{ q.enquiry.enq_no }}</a> rev.{{ q.rev }}<br><span class="note">{{ q.enquiry.customer.company }} · total {{ q.total|rp }} · oleh {{ q.created_by }}</span>
+   <div class="row" style="margin-top:4px">
+    <form class="inline" method="post" action="{{ url_for('sales.approve', qid=q.id) }}">{{ csrf() }}<button class="b s">Setujui</button></form>
+    <a class="b g s" href="{{ url_for('sales.pdf', qid=q.id) }}">Lihat PDF</a>
+    <form class="inline" method="post" action="{{ url_for('sales.reject', qid=q.id) }}">{{ csrf() }}<button class="b g s">Tolak</button></form></div></div>{% endfor %}
+  {% if not (urgent or po_wait or quotes_waiting or dup_reviews) %}<p class="note">Tidak ada yang perlu disetujui.</p>{% endif %}
+ </div>
+ <div class="card"><h2>Pelanggaran terbuka <small>sales dan RM</small></h2>{{ enq_table(breaches, sla, 'Tidak ada pelanggaran.') }}</div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+<div class="msg{{ ' sys' if not m.user_id }}" id="m{{ m.id }}">
+ <div class="h"><b>{{ m.user.name if m.user else 'Sistem' }}</b>{{ m.t|dt }}</div>
+ <div class="x">{{ m.text }}</div>
+ {% if m.file_path %}<div><a href="{{ url_for('chat.file', mid=m.id) }}">📎 {{ m.file_name }}</a></div>{% endif %}
+ {% if m.action %}<div style="margin-top:4px">
+  {% if m.action.post %}{% if not m.action.roles or current_user.role in m.action.roles %}<form method="post" action="{{ m.action.url }}" class="inline"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="next" value="{{ request.path if request.endpoint != 'chat.poll' else url_for('chat.room', cid=m.channel_id) }}"><button class="b s">{{ m.action.label }}</button></form>{% endif %}
+  {% else %}<a class="b s g" href="{{ m.action.url }}">{{ m.action.label }}</a>{% endif %}
+ </div>{% endif %}
+</div>

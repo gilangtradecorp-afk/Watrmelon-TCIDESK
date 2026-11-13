@@ -1,0 +1,50 @@
+{% extends "base.html" %}{% from "_m.html" import csrf, kpi, tier %}
+{% block main %}
+<div class="top">
+ <div><h1>{{ 'Antrean ' ~ current_user.team if current_user.role == 'support' else 'Request saya ke tim' if current_user.role == 'sales' else 'Hand-off Hub' }}</h1>
+ <div class="sub">Satu antrean bersama, diurutkan skor KYC dan ditandai region.</div></div>
+ {% if current_user.role in ('mgmt','admin') %}<form method="get"><select name="region" onchange="this.form.submit()" aria-label="Region"><option value="">Semua region</option>{% for r in REGIONS %}<option {{ 'selected' if region == r }}>{{ r }}</option>{% endfor %}</select></form>{% endif %}
+</div>
+<div class="kpis">
+ {% for d, c in cap.items() %}
+ <div class="kpi" style="flex-basis:260px"><div class="l">Status {{ d }} hari ini · {{ c.cap }} slot/hari</div>
+  <div class="trk" style="margin:6px 0"><i class="{{ 'sL' if c.used > c.cap else 'sD' }}" style="width:{{ [100, c.used / c.cap * 100]|min }}%"></i></div>
+  <div class="d"><b>{{ c.used }} dari {{ c.cap }} terpakai</b> · {% for r in REGIONS %}{{ r }} {{ c.by.get(r, 0) }} · {% endfor %}Tier A {{ c.tier_a }}</div></div>
+ {% endfor %}
+ {{ kpi('Dialihkan ke katalog', redirected, 'jam Drafter yang dihemat') }}
+ {{ kpi('Ditolak', rejected, 'paket tidak jelas / kurang') }}
+</div>
+<div class="kan">
+{% for d, rows in lanes.items() %}
+ <div class="lane"><h3>{{ d }} <span>{{ rows|length }}</span></h3>
+ {% for r in rows %}{% set s = states[r.id] %}
+  <div class="tk {{ s.cls }}">
+   <a class="mono" href="{{ url_for('enquiries.detail', eid=r.enquiry_id) }}">{{ r.enquiry.enq_no }}</a>
+   <span>{{ r.title }}</span>
+   <div class="f"><span>{{ tier(r.enquiry) }} {{ r.enquiry.score }} · {{ r.region }} · {{ r.seller_code }}{% if r.urgent %} · <b>URGENT</b>{% endif %}</span><span>{{ s.t }}{% if r.due and r.status == 'accepted' %}, target {{ r.due|dt(false) }}{% endif %}</span></div>
+   <div class="acts">
+    {% if can_act(r) and r.status == 'sent' %}
+     <form class="inline" method="post" action="{{ url_for('hub.accept', rid=r.id) }}">{{ csrf() }}<button class="b s">Terima</button></form>
+     <details class="act"><summary class="b g s">Tolak</summary><form class="pop" method="post" action="{{ url_for('hub.reject', rid=r.id) }}">{{ csrf() }}
+      <div class="fr"><label for="rr{{ r.id }}">Alasan</label><select id="rr{{ r.id }}" name="reason">{% for x in REJECT_REASONS %}<option>{{ x }}</option>{% endfor %}</select></div>
+      <div class="fr"><label for="rn{{ r.id }}">Yang harus diperbaiki sales *</label><textarea id="rn{{ r.id }}" name="note" rows="2" required></textarea></div>
+      <button class="b">Tolak request</button></form></details>
+     {% if r.dept == 'Drafter' %}<form class="inline" method="post" action="{{ url_for('hub.to_catalog', rid=r.id) }}">{{ csrf() }}<button class="b g s">Ke katalog</button></form>{% endif %}
+    {% endif %}
+    {% if can_act(r) and r.status == 'accepted' %}
+     <details class="act"><summary class="b s">Kembalikan</summary><form class="pop" method="post" action="{{ url_for('hub.hand_back', rid=r.id) }}">{{ csrf() }}
+      <div class="fr"><label for="hb{{ r.id }}">Yang dikembalikan (gambar, harga, jadwal, jawaban) *</label><textarea id="hb{{ r.id }}" name="note" rows="3" required></textarea></div>
+      <button class="b">Kembalikan ke sales</button></form></details>
+    {% endif %}
+    {% if current_user.role in ('sales','rm') and r.status in ('sent','accepted') %}<form class="inline" method="post" action="{{ url_for('hub.nudge', rid=r.id) }}">{{ csrf() }}<button class="b g s">Colek</button></form>{% endif %}
+    {% if r.status == 'pending' and current_user.role in ('rm','admin') and (current_user.role == 'admin' or current_user.region == r.region) %}
+     <form class="inline" method="post" action="{{ url_for('hub.approve', rid=r.id) }}">{{ csrf() }}<button class="b s">Setujui urgent</button></form>
+    {% endif %}
+    <a class="b g s" href="{{ url_for('hub.history', rid=r.id) }}">Log</a>
+   </div>
+  </div>
+ {% else %}<span class="note">Tidak ada yang aktif</span>{% endfor %}
+ </div>
+{% endfor %}
+</div>
+{% endblock %}

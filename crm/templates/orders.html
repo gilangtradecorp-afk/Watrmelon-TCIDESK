@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="top"><div><h1>Order (PO)</h1><div class="sub">Enquiry yang menang, dari PO diterima sampai diserahkan ke Finance.</div></div>
+{% if current_user.role in ('rm','mgmt','admin') %}<a class="b g" href="{{ url_for('sales.export') }}">Ekspor Excel</a>{% endif %}</div>
+<div class="kpis">
+ {% for st in WON_STAGES %}{% set n = rows|selectattr('stage', 'equalto', st)|list|length %}<div class="kpi" style="flex-basis:120px"><div class="l">{{ st }}</div><div class="v">{{ n }}</div></div>{% endfor %}
+</div>
+<div class="card">{% if rows %}<div class="scroll"><table>
+ <tr><th>Nomor</th><th>Pelanggan</th><th>Produk</th><th>Nomor PO</th><th>Nilai PO</th><th>Checklist</th><th>Tahap</th><th>Sales</th><th>Update</th></tr>
+ {% for e in rows %}{% set done = (e.po or {}).values()|select|list|length %}<tr class="click" data-href="{{ url_for('enquiries.detail', eid=e.id) }}">
+  <td class="mono"><a href="{{ url_for('enquiries.detail', eid=e.id) }}">{{ e.enq_no }}</a></td><td>{{ e.customer.company }}</td><td>{{ e.product }}</td>
+  <td class="mono">{{ e.po_number or '–' }}</td><td class="mono">{{ (e.po_value or (e.quote.total if e.quote else 0))|rps }}</td>
+  <td><span class="pill {{ 'ok' if done == n_check else 'warn' }}">{{ done }}/{{ n_check }}</span></td>
+  <td><span class="pill {{ 'warn' if e.stage == 'WO approval' else 'ok' }}">{{ e.stage }}</span></td><td>{{ e.seller_code }}</td><td class="note">{{ e.last_update|dt }}</td></tr>{% endfor %}
+</table></div>{% else %}<p class="note">Belum ada order.</p>{% endif %}</div>
+{% endblock %}

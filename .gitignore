@@ -5,3 +5,9 @@ __pycache__/
 *.log
 model/seed_docs/
 model/writes.json
+!.env.example
+
+# Aplikasi Flask
+.venv/
+*.pyc
+instance/

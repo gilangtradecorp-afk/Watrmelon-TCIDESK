@@ -1,0 +1,1675 @@
+{
+ "enquiries": {
+  "e-sby-0014": {
+   "enqNo": "ENQ-SBY-ADI-261111-0014",
+   "received": "2026-11-11T06:10:00.000Z",
+   "lastUpdate": "2026-11-11T06:10:00.000Z",
+   "source": "Central",
+   "customer": "PT Bumi Konstruksi (sample)",
+   "contact": "Bpk. Rudi, Site Manager",
+   "phone": "0812-5550-0114",
+   "email": "rudi@bumikonstruksi.example",
+   "line": "Modular",
+   "type": "Project",
+   "product": "Modular office, 6 units",
+   "location": "Gresik",
+   "qty": "6",
+   "region": "SBY",
+   "seller": "ADI",
+   "firstOwner": "ADI",
+   "status": "New",
+   "stage": "New",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "layout": true,
+    "qty": true,
+    "timeline": true
+   },
+   "score": 70,
+   "intakeScore": 70,
+   "log": [
+    {
+     "t": "2026-11-11T06:10:00.000Z",
+     "who": "System",
+     "text": "Created from email to the shared enquiry mailbox. Index number ENQ-SBY-ADI-261111-0014."
+    }
+   ],
+   "dateNeeded": "Jan 2027",
+   "pricingDeadline": "18 Nov 2026",
+   "tier": "A"
+  },
+  "e-sby-0013": {
+   "enqNo": "ENQ-SBY-AND-261110-0013",
+   "received": "2026-11-10T08:00:00.000Z",
+   "lastUpdate": "2026-11-10T08:00:00.000Z",
+   "source": "Central",
+   "customer": "PT Papua Mandiri (sample)",
+   "contact": "Ibu Yohana, Procurement",
+   "phone": "0813-5550-0113",
+   "email": "yohana@papuamandiri.example",
+   "line": "Container",
+   "type": "Project",
+   "product": "Site camp, 40ft office x 4",
+   "location": "Jayapura",
+   "qty": "4",
+   "region": "SBY",
+   "seller": "AND",
+   "firstOwner": "AND",
+   "status": "New",
+   "stage": "New",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "qty": true,
+    "timeline": true,
+    "location": true,
+    "budget": true
+   },
+   "score": 70,
+   "intakeScore": 70,
+   "log": [
+    {
+     "t": "2026-11-10T08:00:00.000Z",
+     "who": "System",
+     "text": "Created from email to the shared enquiry mailbox."
+    }
+   ],
+   "dateNeeded": "Feb 2027",
+   "tier": "A"
+  },
+  "e-sby-0009": {
+   "enqNo": "ENQ-SBY-ADI-261104-0009",
+   "received": "2026-11-04T02:20:00.000Z",
+   "lastUpdate": "2026-11-11T08:00:00.000Z",
+   "source": "Central",
+   "customer": "CV Nusa Logistik (sample)",
+   "contact": "Bpk. Hendra, Owner",
+   "phone": "0811-5550-0109",
+   "email": "hendra@nusalogistik.example",
+   "line": "Container",
+   "type": "Retail",
+   "product": "40ft dry container x 20 (sale)",
+   "location": "Gresik",
+   "qty": "20",
+   "region": "SBY",
+   "seller": "ADI",
+   "firstOwner": "ADI",
+   "status": "Ongoing",
+   "stage": "Quote sent",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "repeat": true,
+    "need": true,
+    "qty": true,
+    "timeline": true,
+    "location": true
+   },
+   "score": 75,
+   "intakeScore": 75,
+   "log": [
+    {
+     "t": "2026-11-11T08:00:00.000Z",
+     "who": "Adi",
+     "text": "Follow-up: customer is comparing with one competitor. proof: WA screenshot"
+    },
+    {
+     "t": "2026-11-10T07:10:00.000Z",
+     "who": "Adi",
+     "text": "Follow-up: customer asked for 5% discount on 20 units. proof: email"
+    },
+    {
+     "t": "2026-11-09T03:30:00.000Z",
+     "who": "Adi",
+     "text": "Quotation rev.2 (Sale) sent: Rp 1,029,000,000."
+    },
+    {
+     "t": "2026-11-04T04:45:00.000Z",
+     "who": "Adi",
+     "text": "First contact by Call: confirmed 20 units, delivery to Gresik."
+    }
+   ],
+   "contactedAt": "2026-11-04T04:45:00.000Z",
+   "quote": {
+    "tpl": "Sale",
+    "rev": 2,
+    "lines": [
+     {
+      "item": "40ft Dry container, cargo-worthy",
+      "qty": 20,
+      "price": 48500000
+     },
+     {
+      "item": "Lockbox and forklift pockets",
+      "qty": 20,
+      "price": 1750000
+     },
+     {
+      "item": "Delivery within the city, per unit",
+      "qty": 20,
+      "price": 1200000
+     }
+    ],
+    "total": 1029000000
+   },
+   "dateNeeded": "Dec 2026",
+   "tier": "A"
+  },
+  "e-sby-0006": {
+   "enqNo": "ENQ-SBY-ADI-261028-0006",
+   "received": "2026-10-28T03:12:00.000Z",
+   "lastUpdate": "2026-11-11T01:40:00.000Z",
+   "source": "Central",
+   "customer": "PT Samudra Bali (sample)",
+   "contact": "Ibu Kadek Ayu, Owner",
+   "phone": "0812-5550-0106",
+   "email": "kadek@samudrabali.example",
+   "line": "Modification",
+   "type": "Retail",
+   "product": "Container cafe, 2 x 20ft, glass front, AC",
+   "location": "Canggu, Bali",
+   "qty": "2",
+   "region": "SBY",
+   "seller": "ADI",
+   "firstOwner": "ADI",
+   "status": "Ongoing",
+   "stage": "Drafter",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "repeat": true,
+    "need": true,
+    "layout": true,
+    "qty": true,
+    "timeline": true,
+    "location": true
+   },
+   "score": 90,
+   "intakeScore": 65,
+   "log": [
+    {
+     "t": "2026-11-10T01:40:00.000Z",
+     "who": "Drafter",
+     "text": "Drafter accepted the request, due 13 Nov."
+    },
+    {
+     "t": "2026-11-07T07:05:00.000Z",
+     "who": "Adi",
+     "text": "Request sent to Drafter: cafe modification 2 x 20ft."
+    },
+    {
+     "t": "2026-11-06T09:30:00.000Z",
+     "who": "Adi",
+     "text": "Follow-up: call with Ibu Kadek, budget not shared yet. proof: call log"
+    },
+    {
+     "t": "2026-10-28T06:15:00.000Z",
+     "who": "Adi",
+     "text": "First contact by WhatsApp. proof: WA screenshot"
+    }
+   ],
+   "contactedAt": "2026-10-28T06:15:00.000Z",
+   "dateNeeded": "Jan 2027",
+   "pricingDeadline": "20 Nov 2026",
+   "tier": "A"
+  },
+  "e-sby-0012": {
+   "enqNo": "ENQ-SBY-ADI-261109-0012",
+   "received": "2026-11-09T03:00:00.000Z",
+   "lastUpdate": "2026-11-09T07:00:00.000Z",
+   "source": "WhatsApp",
+   "customer": "Hotel Ubud Lestari (sample)",
+   "contact": "Bpk. Made",
+   "phone": "0817-5550-0112",
+   "email": "",
+   "line": "Container",
+   "type": "Retail",
+   "product": "20ft reefer rental",
+   "location": "Ubud, Bali",
+   "qty": "",
+   "region": "SBY",
+   "seller": "ADI",
+   "firstOwner": "ADI",
+   "status": "Contacted",
+   "stage": "KYC",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "location": true
+   },
+   "score": 40,
+   "intakeScore": 40,
+   "log": [
+    {
+     "t": "2026-11-09T07:00:00.000Z",
+     "who": "Adi",
+     "text": "First contact by WhatsApp: asked for quantity and start date. proof: WA screenshot"
+    }
+   ],
+   "contactedAt": "2026-11-09T07:00:00.000Z",
+   "tier": "B"
+  },
+  "e-sby-0010": {
+   "enqNo": "ENQ-SBY-ADI-261105-0010",
+   "received": "2026-11-05T01:50:00.000Z",
+   "lastUpdate": "2026-11-05T09:20:00.000Z",
+   "source": "Direct email",
+   "customer": "PT Lombok Agro (sample)",
+   "contact": "Ibu Sri",
+   "phone": "0818-5550-0110",
+   "email": "sri@lombokagro.example",
+   "line": "Container",
+   "type": "Retail",
+   "product": "20ft dry container x 4 (rental)",
+   "location": "Mataram, NTB",
+   "qty": "4",
+   "region": "SBY",
+   "seller": "ADI",
+   "firstOwner": "ADI",
+   "status": "Ongoing",
+   "stage": "Quote sent",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "qty": true,
+    "location": true
+   },
+   "score": 50,
+   "intakeScore": 50,
+   "log": [
+    {
+     "t": "2026-11-05T09:20:00.000Z",
+     "who": "Adi",
+     "text": "Quotation rev.1 (Rental) sent: Rp 7,600,000."
+    },
+    {
+     "t": "2026-11-05T03:05:00.000Z",
+     "who": "Adi",
+     "text": "First contact by Email."
+    }
+   ],
+   "contactedAt": "2026-11-05T03:05:00.000Z",
+   "quote": {
+    "tpl": "Rental",
+    "rev": 1,
+    "lines": [
+     {
+      "item": "20ft Dry container rental, per month",
+      "qty": 4,
+      "price": 1900000
+     }
+    ],
+    "total": 7600000
+   },
+   "tier": "B"
+  },
+  "e-sby-0008": {
+   "enqNo": "ENQ-SBY-ADI-261102-0008",
+   "received": "2026-11-02T02:00:00.000Z",
+   "lastUpdate": "2026-11-02T04:00:00.000Z",
+   "source": "Central",
+   "customer": "(no company given)",
+   "contact": "gmail user",
+   "phone": "",
+   "email": "hargakontainer@gmail.example",
+   "line": "Container",
+   "type": "Retail",
+   "product": "\"Harga kontainer?\"",
+   "location": "",
+   "qty": "",
+   "region": "SBY",
+   "seller": "ADI",
+   "firstOwner": "ADI",
+   "status": "No response",
+   "stage": "Price-check",
+   "redFlags": 1,
+   "kyc": {
+    "need": true
+   },
+   "score": 5,
+   "intakeScore": 5,
+   "log": [
+    {
+     "t": "2026-11-02T04:00:00.000Z",
+     "who": "Adi",
+     "text": "Catalog price range sent. Asked for company and quantity. No reply."
+    }
+   ],
+   "contactedAt": "2026-11-02T04:00:00.000Z",
+   "priceCheck": true,
+   "tier": "P"
+  },
+  "e-sby-0011": {
+   "enqNo": "ENQ-SBY-GIL-261106-0011",
+   "received": "2026-11-06T06:30:00.000Z",
+   "lastUpdate": "2026-11-11T02:00:00.000Z",
+   "source": "Direct email",
+   "customer": "PT Timur Sanitasi (sample)",
+   "contact": "Bpk. Yoseph",
+   "phone": "0821-5550-0111",
+   "email": "yoseph@timursanitasi.example",
+   "line": "Modular",
+   "type": "Project",
+   "product": "Toilet module x 10",
+   "location": "Kupang, NTT",
+   "qty": "10",
+   "region": "SBY",
+   "seller": "GIL",
+   "firstOwner": "GIL",
+   "status": "Ongoing",
+   "stage": "Estimator",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "layout": true,
+    "qty": true,
+    "timeline": true,
+    "location": true,
+    "budget": true
+   },
+   "score": 85,
+   "intakeScore": 85,
+   "log": [
+    {
+     "t": "2026-11-11T02:00:00.000Z",
+     "who": "Gilang",
+     "text": "Follow-up: customer confirmed budget ceiling. proof: email"
+    },
+    {
+     "t": "2026-11-06T09:00:00.000Z",
+     "who": "Gilang",
+     "text": "Request sent to Estimator: toilet module x 10."
+    },
+    {
+     "t": "2026-11-06T07:40:00.000Z",
+     "who": "Gilang",
+     "text": "First contact by Call."
+    }
+   ],
+   "contactedAt": "2026-11-06T07:40:00.000Z",
+   "dateNeeded": "Jan 2027",
+   "tier": "A"
+  },
+  "e-sby-0004": {
+   "enqNo": "ENQ-SBY-AND-261020-0004",
+   "received": "2026-10-20T02:00:00.000Z",
+   "lastUpdate": "2026-11-09T04:30:00.000Z",
+   "source": "Central",
+   "customer": "PT Flobamora Jaya (sample)",
+   "contact": "Bpk. Markus",
+   "phone": "0822-5550-0104",
+   "email": "markus@flobamorajaya.example",
+   "line": "Container",
+   "type": "Project",
+   "product": "Office container x 4 with AC",
+   "location": "Kupang, NTT",
+   "qty": "4",
+   "region": "SBY",
+   "seller": "AND",
+   "firstOwner": "AND",
+   "status": "Won",
+   "stage": "Production",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "layout": true,
+    "qty": true,
+    "timeline": true,
+    "location": true,
+    "budget": true
+   },
+   "score": 85,
+   "intakeScore": 85,
+   "log": [
+    {
+     "t": "2026-11-09T04:30:00.000Z",
+     "who": "Trucking",
+     "text": "Trucking accepted the delivery request."
+    },
+    {
+     "t": "2026-11-06T04:00:00.000Z",
+     "who": "Purchasing",
+     "text": "Purchasing handed back: vendor PO for AC units issued."
+    },
+    {
+     "t": "2026-11-03T08:00:00.000Z",
+     "who": "Sales Support",
+     "text": "Work order opened, kickoff held, minutes shared."
+    },
+    {
+     "t": "2026-10-31T03:00:00.000Z",
+     "who": "Gilang",
+     "text": "PO package approved by RM."
+    }
+   ],
+   "contactedAt": "2026-10-20T03:30:00.000Z",
+   "quote": {
+    "tpl": "Sale",
+    "rev": 3,
+    "lines": [
+     {
+      "item": "20ft Office container, standard",
+      "qty": 4,
+      "price": 68000000
+     },
+     {
+      "item": "Delivery within the city, per unit",
+      "qty": 4,
+      "price": 1200000
+     }
+    ],
+    "total": 276800000
+   },
+   "po": {
+    "drawing": true,
+    "quote": true,
+    "match": true,
+    "terms": true,
+    "timeline": true,
+    "payment": true
+   },
+   "tier": "A"
+  },
+  "e-sby-0007": {
+   "enqNo": "ENQ-SBY-AND-261103-0007",
+   "received": "2026-11-03T03:10:00.000Z",
+   "lastUpdate": "2026-11-06T02:00:00.000Z",
+   "source": "Central",
+   "customer": "PT Dewata Tambang (sample)",
+   "contact": "Bpk. Wayan",
+   "phone": "0823-5550-0107",
+   "email": "wayan@dewatatambang.example",
+   "line": "Container",
+   "type": "Project",
+   "product": "Mess hall, 40ft x 3",
+   "location": "Sumbawa, NTB",
+   "qty": "3",
+   "region": "SBY",
+   "seller": "AND",
+   "firstOwner": "AND",
+   "status": "Contacted",
+   "stage": "KYC",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "qty": true,
+    "location": true
+   },
+   "score": 50,
+   "intakeScore": 50,
+   "log": [
+    {
+     "t": "2026-11-06T02:00:00.000Z",
+     "who": "Andri",
+     "text": "Follow-up: waiting for the site layout from the customer."
+    },
+    {
+     "t": "2026-11-03T08:30:00.000Z",
+     "who": "Andri",
+     "text": "First contact by Call."
+    }
+   ],
+   "contactedAt": "2026-11-03T08:30:00.000Z",
+   "tier": "B"
+  },
+  "e-sby-0003": {
+   "enqNo": "ENQ-SBY-GIL-261022-0003",
+   "received": "2026-10-22T03:00:00.000Z",
+   "lastUpdate": "2026-11-05T03:00:00.000Z",
+   "source": "Central",
+   "customer": "PT Sorong Maritim (sample)",
+   "contact": "Bpk. Daniel",
+   "phone": "0852-5550-0103",
+   "email": "daniel@sorongmaritim.example",
+   "line": "Container",
+   "type": "Retail",
+   "product": "40ft reefer x 4",
+   "location": "Sorong",
+   "qty": "4",
+   "region": "SBY",
+   "seller": "GIL",
+   "firstOwner": "GIL",
+   "status": "Lost",
+   "stage": "Quote sent",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "qty": true,
+    "timeline": true,
+    "location": true
+   },
+   "score": 60,
+   "intakeScore": 60,
+   "log": [
+    {
+     "t": "2026-11-05T03:00:00.000Z",
+     "who": "Gilang",
+     "text": "Status: Lost (Price). Competitor was 8% lower."
+    }
+   ],
+   "contactedAt": "2026-10-22T04:00:00.000Z",
+   "lossReason": "Price",
+   "quote": {
+    "tpl": "Sale",
+    "rev": 1,
+    "lines": [
+     {
+      "item": "40ft Reefer container",
+      "qty": 4,
+      "price": 165000000
+     }
+    ],
+    "total": 660000000
+   },
+   "tier": "B"
+  },
+  "e-sby-0002": {
+   "enqNo": "ENQ-SBY-GIL-261019-0002",
+   "received": "2026-10-19T02:30:00.000Z",
+   "lastUpdate": "2026-10-30T07:00:00.000Z",
+   "source": "Direct email",
+   "customer": "PT Bali Resor Indah (sample)",
+   "contact": "Ibu Putu",
+   "phone": "0853-5550-0102",
+   "email": "putu@baliresor.example",
+   "line": "Modular",
+   "type": "Retail",
+   "product": "Modular office 6 x 3 m, 6 units",
+   "location": "Nusa Dua, Bali",
+   "qty": "6",
+   "region": "SBY",
+   "seller": "GIL",
+   "firstOwner": "GIL",
+   "status": "Won",
+   "stage": "BAST signed",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "repeat": true,
+    "need": true,
+    "layout": true,
+    "qty": true,
+    "timeline": true,
+    "location": true,
+    "budget": true
+   },
+   "score": 100,
+   "intakeScore": 100,
+   "log": [
+    {
+     "t": "2026-10-30T07:00:00.000Z",
+     "who": "Gilang",
+     "text": "Stage moved to BAST signed."
+    }
+   ],
+   "contactedAt": "2026-10-19T03:15:00.000Z",
+   "quote": {
+    "tpl": "Sale",
+    "rev": 2,
+    "lines": [
+     {
+      "item": "Modular office unit 6 x 3 m",
+      "qty": 6,
+      "price": 82000000
+     }
+    ],
+    "total": 492000000
+   },
+   "po": {
+    "drawing": true,
+    "quote": true,
+    "match": true,
+    "terms": true,
+    "timeline": true,
+    "payment": true
+   },
+   "tier": "A"
+  },
+  "e-sby-0015": {
+   "enqNo": "ENQ-SBY-ADI-261112-0015",
+   "received": "2026-11-12T01:40:00.000Z",
+   "lastUpdate": "2026-11-12T01:40:00.000Z",
+   "source": "WhatsApp",
+   "customer": "CV Gili Bahari (sample)",
+   "contact": "Ibu Lina",
+   "phone": "0819-5550-0115",
+   "email": "lina@gilibahari.example",
+   "line": "Container",
+   "type": "Retail",
+   "product": "20ft office container",
+   "location": "Lombok Utara",
+   "qty": "1",
+   "region": "SBY",
+   "seller": "ADI",
+   "firstOwner": "ADI",
+   "status": "New",
+   "stage": "New",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "qty": true,
+    "location": true
+   },
+   "score": 50,
+   "intakeScore": 50,
+   "log": [
+    {
+     "t": "2026-11-12T01:40:00.000Z",
+     "who": "Adi",
+     "text": "Enquiry logged from WhatsApp."
+    }
+   ],
+   "tier": "B"
+  },
+  "e-sby-0016": {
+   "enqNo": "ENQ-SBY-GIL-261112-0016",
+   "received": "2026-11-12T01:10:00.000Z",
+   "lastUpdate": "2026-11-12T02:10:00.000Z",
+   "source": "Direct email",
+   "customer": "PT Surabaya Cold Chain (sample)",
+   "contact": "Bpk. Anton",
+   "phone": "0816-5550-0116",
+   "email": "anton@sbycoldchain.example",
+   "line": "Container",
+   "type": "Retail",
+   "product": "20ft reefer x 2 (rental)",
+   "location": "Surabaya",
+   "qty": "2",
+   "region": "SBY",
+   "seller": "GIL",
+   "firstOwner": "GIL",
+   "status": "Contacted",
+   "stage": "KYC",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "repeat": true,
+    "need": true,
+    "qty": true,
+    "location": true
+   },
+   "score": 65,
+   "intakeScore": 65,
+   "log": [
+    {
+     "t": "2026-11-12T02:10:00.000Z",
+     "who": "Gilang",
+     "text": "First contact by Call: rental for 6 months from December."
+    }
+   ],
+   "contactedAt": "2026-11-12T02:10:00.000Z",
+   "tier": "B"
+  },
+  "e-bpn-0003": {
+   "enqNo": "ENQ-BPN-HEN-261030-0003",
+   "received": "2026-10-30T03:00:00.000Z",
+   "lastUpdate": "2026-11-10T02:00:00.000Z",
+   "source": "Central",
+   "customer": "PT Borneo Karya (sample)",
+   "contact": "Bpk. Syahrul",
+   "phone": "0811-5550-0203",
+   "email": "syahrul@borneokarya.example",
+   "line": "Container",
+   "type": "Project",
+   "product": "Workshop container 40ft x 6",
+   "location": "Balikpapan",
+   "qty": "6",
+   "region": "BPN",
+   "seller": "HEN",
+   "firstOwner": "HEN",
+   "status": "Ongoing",
+   "stage": "Estimator",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "layout": true,
+    "qty": true,
+    "timeline": true,
+    "location": true
+   },
+   "score": 75,
+   "intakeScore": 75,
+   "log": [
+    {
+     "t": "2026-11-10T02:00:00.000Z",
+     "who": "Estimator",
+     "text": "Estimator accepted the request, due 13 Nov."
+    }
+   ],
+   "contactedAt": "2026-10-30T04:10:00.000Z",
+   "tier": "A"
+  },
+  "e-bpn-0007": {
+   "enqNo": "ENQ-BPN-NOV-261109-0007",
+   "received": "2026-11-09T02:00:00.000Z",
+   "lastUpdate": "2026-11-11T09:00:00.000Z",
+   "source": "Central",
+   "customer": "PT Mahakam Energi (sample)",
+   "contact": "Ibu Rina",
+   "phone": "0812-5550-0207",
+   "email": "rina@mahakamenergi.example",
+   "line": "Modular",
+   "type": "Project",
+   "product": "Mess camp, 40 persons",
+   "location": "Samarinda",
+   "qty": "",
+   "region": "BPN",
+   "seller": "NOV",
+   "firstOwner": "NOV",
+   "status": "Ongoing",
+   "stage": "Drafter",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "layout": true,
+    "timeline": true,
+    "location": true,
+    "budget": true
+   },
+   "score": 75,
+   "intakeScore": 75,
+   "log": [
+    {
+     "t": "2026-11-11T09:00:00.000Z",
+     "who": "Novi",
+     "text": "Request sent to Drafter: mess camp layout."
+    },
+    {
+     "t": "2026-11-09T03:20:00.000Z",
+     "who": "Novi",
+     "text": "First contact by Call."
+    }
+   ],
+   "contactedAt": "2026-11-09T03:20:00.000Z",
+   "tier": "A"
+  },
+  "e-bpn-0006": {
+   "enqNo": "ENQ-BPN-REV-261015-0006",
+   "received": "2026-10-15T02:00:00.000Z",
+   "lastUpdate": "2026-11-03T03:00:00.000Z",
+   "source": "Central",
+   "customer": "PT Kutai Baja (sample)",
+   "contact": "Bpk. Arif",
+   "phone": "0813-5550-0206",
+   "email": "arif@kutaibaja.example",
+   "line": "Modification",
+   "type": "Project",
+   "product": "Tool store container x 3, steel frame",
+   "location": "Bontang",
+   "qty": "3",
+   "region": "BPN",
+   "seller": "REV",
+   "firstOwner": "REV",
+   "status": "Won",
+   "stage": "Production",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "repeat": true,
+    "need": true,
+    "layout": true,
+    "qty": true,
+    "timeline": true,
+    "location": true,
+    "budget": true
+   },
+   "score": 100,
+   "intakeScore": 100,
+   "log": [
+    {
+     "t": "2026-11-03T03:00:00.000Z",
+     "who": "Purchasing",
+     "text": "Purchasing accepted the vendor PO request."
+    }
+   ],
+   "contactedAt": "2026-10-15T03:00:00.000Z",
+   "quote": {
+    "tpl": "Sale",
+    "rev": 2,
+    "lines": [
+     {
+      "item": "20ft Office container, standard",
+      "qty": 3,
+      "price": 68000000
+     }
+    ],
+    "total": 204000000
+   },
+   "po": {
+    "drawing": true,
+    "quote": true,
+    "match": true,
+    "terms": true,
+    "timeline": true,
+    "payment": true
+   },
+   "tier": "A"
+  },
+  "e-jkt-0005": {
+   "enqNo": "ENQ-JKT-EVI-261103-0005",
+   "received": "2026-11-03T02:00:00.000Z",
+   "lastUpdate": "2026-11-05T03:00:00.000Z",
+   "source": "Central",
+   "customer": "PT Citra Bangun (sample)",
+   "contact": "Bpk. Fajar",
+   "phone": "0811-5550-0305",
+   "email": "fajar@citrabangun.example",
+   "line": "Modular",
+   "type": "Project",
+   "product": "Site office, 12 units, 2 levels",
+   "location": "Bekasi",
+   "qty": "12",
+   "region": "JKT",
+   "seller": "EVI",
+   "firstOwner": "EVI",
+   "status": "Ongoing",
+   "stage": "Drafter",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "layout": true,
+    "qty": true,
+    "timeline": true,
+    "location": true
+   },
+   "score": 75,
+   "intakeScore": 75,
+   "log": [
+    {
+     "t": "2026-11-05T03:00:00.000Z",
+     "who": "Drafter",
+     "text": "Drafter accepted the request, due 11 Nov."
+    }
+   ],
+   "contactedAt": "2026-11-03T04:30:00.000Z",
+   "tier": "A"
+  },
+  "e-jkt-0002": {
+   "enqNo": "ENQ-JKT-IVA-261101-0002",
+   "received": "2026-11-02T01:30:00.000Z",
+   "lastUpdate": "2026-11-06T02:00:00.000Z",
+   "source": "Direct email",
+   "customer": "PT Segar Laut (sample)",
+   "contact": "Ibu Maya",
+   "phone": "0812-5550-0302",
+   "email": "maya@segarlaut.example",
+   "line": "Container",
+   "type": "Retail",
+   "product": "Reefer 20ft with genset package",
+   "location": "Muara Baru",
+   "qty": "2",
+   "region": "JKT",
+   "seller": "IVA",
+   "firstOwner": "IVA",
+   "status": "Ongoing",
+   "stage": "Estimator",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "qty": true,
+    "location": true
+   },
+   "score": 50,
+   "intakeScore": 50,
+   "log": [
+    {
+     "t": "2026-11-06T02:00:00.000Z",
+     "who": "Estimator",
+     "text": "Estimator accepted the request, due 10 Nov."
+    }
+   ],
+   "contactedAt": "2026-11-02T06:40:00.000Z",
+   "tier": "B"
+  },
+  "e-jkt-0001": {
+   "enqNo": "ENQ-JKT-WEL-261012-0001",
+   "received": "2026-10-12T03:00:00.000Z",
+   "lastUpdate": "2026-11-10T03:00:00.000Z",
+   "source": "Central",
+   "customer": "PT Karya Cikarang (sample)",
+   "contact": "Bpk. Dedi",
+   "phone": "0813-5550-0301",
+   "email": "dedi@karyacikarang.example",
+   "line": "Container",
+   "type": "Retail",
+   "product": "40ft dry container x 6",
+   "location": "Cikarang",
+   "qty": "6",
+   "region": "JKT",
+   "seller": "WEL",
+   "firstOwner": "WEL",
+   "status": "Won",
+   "stage": "Production",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "repeat": true,
+    "need": true,
+    "qty": true,
+    "timeline": true,
+    "location": true,
+    "budget": true
+   },
+   "score": 85,
+   "intakeScore": 85,
+   "log": [
+    {
+     "t": "2026-11-10T03:00:00.000Z",
+     "who": "Trucking",
+     "text": "Trucking accepted the delivery request."
+    }
+   ],
+   "contactedAt": "2026-10-12T04:00:00.000Z",
+   "quote": {
+    "tpl": "Sale",
+    "rev": 1,
+    "lines": [
+     {
+      "item": "40ft Dry container, cargo-worthy",
+      "qty": 6,
+      "price": 48500000
+     }
+    ],
+    "total": 291000000
+   },
+   "po": {
+    "drawing": true,
+    "quote": true,
+    "match": true,
+    "terms": true,
+    "timeline": true,
+    "payment": true
+   },
+   "tier": "A"
+  },
+  "e-jkt-0004": {
+   "enqNo": "ENQ-JKT-END-261028-0004",
+   "received": "2026-10-28T02:00:00.000Z",
+   "lastUpdate": "2026-11-11T03:00:00.000Z",
+   "source": "Central",
+   "customer": "PT Tangerang Logam (sample)",
+   "contact": "Ibu Nia",
+   "phone": "0815-5550-0304",
+   "email": "nia@tangeranglogam.example",
+   "line": "Modular",
+   "type": "Project",
+   "product": "Modular office 6 x 3 m, 4 units",
+   "location": "Tangerang",
+   "qty": "4",
+   "region": "JKT",
+   "seller": "END",
+   "firstOwner": "END",
+   "status": "Won",
+   "stage": "WO / Kickoff",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "layout": true,
+    "qty": true,
+    "timeline": true,
+    "location": true,
+    "budget": true
+   },
+   "score": 85,
+   "intakeScore": 85,
+   "log": [
+    {
+     "t": "2026-11-11T03:00:00.000Z",
+     "who": "Dini",
+     "text": "PO package approved by RM. Work order requested."
+    }
+   ],
+   "contactedAt": "2026-10-28T03:10:00.000Z",
+   "quote": {
+    "tpl": "Sale",
+    "rev": 2,
+    "lines": [
+     {
+      "item": "Modular office unit 6 x 3 m",
+      "qty": 4,
+      "price": 82000000
+     }
+    ],
+    "total": 328000000
+   },
+   "po": {
+    "drawing": true,
+    "quote": true,
+    "match": true,
+    "terms": true,
+    "timeline": true,
+    "payment": true
+   },
+   "tier": "A"
+  },
+  "e-jkt-0003": {
+   "enqNo": "ENQ-JKT-YOP-261027-0003",
+   "received": "2026-10-27T06:00:00.000Z",
+   "lastUpdate": "2026-11-04T04:00:00.000Z",
+   "source": "WhatsApp",
+   "customer": "PT Depok Prima (sample)",
+   "contact": "Bpk. Agus",
+   "phone": "0816-5550-0303",
+   "email": "agus@depokprima.example",
+   "line": "Container",
+   "type": "Retail",
+   "product": "20ft office container x 2",
+   "location": "Depok",
+   "qty": "2",
+   "region": "JKT",
+   "seller": "YOP",
+   "firstOwner": "YOP",
+   "status": "Lost",
+   "stage": "Quote sent",
+   "redFlags": 0,
+   "kyc": {
+    "identity": true,
+    "need": true,
+    "qty": true,
+    "location": true
+   },
+   "score": 50,
+   "intakeScore": 50,
+   "log": [
+    {
+     "t": "2026-11-04T04:00:00.000Z",
+     "who": "Yopi",
+     "text": "Status: Lost (Lead time). Customer needed delivery in 5 days."
+    }
+   ],
+   "contactedAt": "2026-10-27T08:10:00.000Z",
+   "lossReason": "Lead time",
+   "quote": {
+    "tpl": "Sale",
+    "rev": 1,
+    "lines": [
+     {
+      "item": "20ft Office container, standard",
+      "qty": 2,
+      "price": 68000000
+     }
+    ],
+    "total": 136000000
+   },
+   "tier": "B"
+  }
+ },
+ "requests": {
+  "r01": {
+   "enqId": "e-sby-0006",
+   "enqNo": "ENQ-SBY-ADI-261028-0006",
+   "dept": "Drafter",
+   "seller": "ADI",
+   "region": "SBY",
+   "title": "Cafe modification 2 x 20ft, glass front, AC",
+   "urgent": false,
+   "status": "accepted",
+   "sentAt": "2026-11-07T07:05:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-10T01:40:00.000Z",
+     "who": "Drafter",
+     "text": "Accepted by Drafter. Due in 3 business days."
+    },
+    {
+     "t": "2026-11-07T07:05:00.000Z",
+     "who": "Adi",
+     "text": "Request sent to Drafter."
+    }
+   ],
+   "acceptedAt": "2026-11-10T01:40:00.000Z",
+   "due": "2026-11-13T10:00:00.000Z"
+  },
+  "r02": {
+   "enqId": "e-sby-0014",
+   "enqNo": "ENQ-SBY-ADI-261111-0014",
+   "dept": "Drafter",
+   "seller": "ADI",
+   "region": "SBY",
+   "title": "Modular office 6 units, layout needed tomorrow for pricing",
+   "urgent": true,
+   "status": "pending",
+   "sentAt": "2026-11-12T02:00:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-12T02:00:00.000Z",
+     "who": "Adi",
+     "text": "Request sent to Drafter. Urgent, waiting for RM approval."
+    }
+   ]
+  },
+  "r03": {
+   "enqId": "e-sby-0011",
+   "enqNo": "ENQ-SBY-GIL-261106-0011",
+   "dept": "Estimator",
+   "seller": "GIL",
+   "region": "SBY",
+   "title": "Toilet module x 10, unit price including delivery to Kupang",
+   "urgent": false,
+   "status": "sent",
+   "sentAt": "2026-11-06T09:00:00.000Z",
+   "nudges": 2,
+   "log": [
+    {
+     "t": "2026-11-11T02:05:00.000Z",
+     "who": "Gilang",
+     "text": "Nudge sent: please confirm status."
+    },
+    {
+     "t": "2026-11-10T01:00:00.000Z",
+     "who": "System",
+     "text": "One business day with no feedback. Flagged to the RM."
+    },
+    {
+     "t": "2026-11-09T03:00:00.000Z",
+     "who": "Gilang",
+     "text": "Nudge sent: please confirm status."
+    },
+    {
+     "t": "2026-11-09T01:00:00.000Z",
+     "who": "System",
+     "text": "No accept after 4 business hours. Reminder sent to Estimator."
+    },
+    {
+     "t": "2026-11-06T09:00:00.000Z",
+     "who": "Gilang",
+     "text": "Request sent to Estimator."
+    }
+   ]
+  },
+  "r04": {
+   "enqId": "e-sby-0004",
+   "enqNo": "ENQ-SBY-AND-261020-0004",
+   "dept": "Purchasing",
+   "seller": "AND",
+   "region": "SBY",
+   "title": "Vendor PO: AC units x 8",
+   "urgent": false,
+   "status": "returned",
+   "sentAt": "2026-11-03T02:00:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-06T04:00:00.000Z",
+     "who": "Purchasing",
+     "text": "Handed back: vendor PO issued, delivery 14 Nov."
+    },
+    {
+     "t": "2026-11-03T06:00:00.000Z",
+     "who": "Purchasing",
+     "text": "Accepted by Purchasing."
+    },
+    {
+     "t": "2026-11-03T02:00:00.000Z",
+     "who": "Andri",
+     "text": "Request sent to Purchasing."
+    }
+   ],
+   "acceptedAt": "2026-11-03T06:00:00.000Z",
+   "due": "2026-11-06T10:00:00.000Z",
+   "returnedAt": "2026-11-06T04:00:00.000Z"
+  },
+  "r05": {
+   "enqId": "e-sby-0004",
+   "enqNo": "ENQ-SBY-AND-261020-0004",
+   "dept": "Trucking",
+   "seller": "AND",
+   "region": "SBY",
+   "title": "Delivery to Kupang, 4 units by vessel",
+   "urgent": false,
+   "status": "accepted",
+   "sentAt": "2026-11-09T03:00:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-09T04:30:00.000Z",
+     "who": "Trucking",
+     "text": "Accepted by Trucking. Vessel ETA 18 Nov."
+    },
+    {
+     "t": "2026-11-09T03:00:00.000Z",
+     "who": "Andri",
+     "text": "Request sent to Trucking."
+    }
+   ],
+   "acceptedAt": "2026-11-09T04:30:00.000Z",
+   "due": "2026-11-18T10:00:00.000Z"
+  },
+  "r06": {
+   "enqId": "e-sby-0013",
+   "enqNo": "ENQ-SBY-AND-261110-0013",
+   "dept": "Branch",
+   "seller": "AND",
+   "region": "SBY",
+   "title": "Site visit and survey, Jayapura",
+   "urgent": false,
+   "status": "sent",
+   "sentAt": "2026-11-10T08:30:00.000Z",
+   "nudges": 1,
+   "log": [
+    {
+     "t": "2026-11-12T02:05:00.000Z",
+     "who": "Andri",
+     "text": "Nudge sent: mohon konfirmasi jadwal survey lokasi."
+    },
+    {
+     "t": "2026-11-11T08:30:00.000Z",
+     "who": "System",
+     "text": "One business day with no feedback. Flagged to the RM."
+    },
+    {
+     "t": "2026-11-11T03:30:00.000Z",
+     "who": "System",
+     "text": "No accept after 4 business hours. Reminder sent to Branch."
+    },
+    {
+     "t": "2026-11-10T08:30:00.000Z",
+     "who": "Andri",
+     "text": "Request sent to Branch."
+    }
+   ]
+  },
+  "r07": {
+   "enqId": "e-sby-0009",
+   "enqNo": "ENQ-SBY-ADI-261104-0009",
+   "dept": "Depo",
+   "seller": "ADI",
+   "region": "SBY",
+   "title": "Stock check: 20 x 40ft dry, cargo-worthy",
+   "urgent": false,
+   "status": "returned",
+   "sentAt": "2026-11-04T04:00:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-04T09:00:00.000Z",
+     "who": "Depo",
+     "text": "Handed back: 18 units ready, 2 more by 20 Nov."
+    },
+    {
+     "t": "2026-11-04T05:00:00.000Z",
+     "who": "Depo",
+     "text": "Accepted by Depo."
+    },
+    {
+     "t": "2026-11-04T04:00:00.000Z",
+     "who": "Adi",
+     "text": "Request sent to Depo."
+    }
+   ],
+   "acceptedAt": "2026-11-04T05:00:00.000Z",
+   "due": "2026-11-05T10:00:00.000Z",
+   "returnedAt": "2026-11-04T09:00:00.000Z"
+  },
+  "r08": {
+   "enqId": "e-sby-0012",
+   "enqNo": "ENQ-SBY-ADI-261109-0012",
+   "dept": "Depo",
+   "seller": "ADI",
+   "region": "SBY",
+   "title": "Reefer 20ft unit check, 2 units for rental",
+   "urgent": false,
+   "status": "sent",
+   "sentAt": "2026-11-11T06:00:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-11T06:00:00.000Z",
+     "who": "Adi",
+     "text": "Request sent to Depo."
+    }
+   ]
+  },
+  "r09": {
+   "enqId": "e-sby-0004",
+   "enqNo": "ENQ-SBY-AND-261020-0004",
+   "dept": "Sales Support",
+   "seller": "AND",
+   "region": "SBY",
+   "title": "Work order and kickoff meeting",
+   "urgent": false,
+   "status": "returned",
+   "sentAt": "2026-11-02T02:00:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-03T08:00:00.000Z",
+     "who": "Sales Support",
+     "text": "Handed back: work order opened, minutes of meeting shared, 5 action items."
+    },
+    {
+     "t": "2026-11-02T03:00:00.000Z",
+     "who": "Sales Support",
+     "text": "Accepted by Sales Support."
+    },
+    {
+     "t": "2026-11-02T02:00:00.000Z",
+     "who": "Gilang",
+     "text": "Work order and kickoff requested after RM approval."
+    }
+   ],
+   "acceptedAt": "2026-11-02T03:00:00.000Z",
+   "due": "2026-11-04T10:00:00.000Z",
+   "returnedAt": "2026-11-03T08:00:00.000Z"
+  },
+  "r10": {
+   "enqId": "e-sby-0009",
+   "enqNo": "ENQ-SBY-ADI-261104-0009",
+   "dept": "Estimator",
+   "seller": "ADI",
+   "region": "SBY",
+   "title": "Price for lockbox and forklift pockets option",
+   "urgent": false,
+   "status": "returned",
+   "sentAt": "2026-11-05T02:00:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-07T03:00:00.000Z",
+     "who": "Estimator",
+     "text": "Handed back: Rp 1,750,000 per unit."
+    },
+    {
+     "t": "2026-11-05T08:00:00.000Z",
+     "who": "Estimator",
+     "text": "Accepted by Estimator."
+    },
+    {
+     "t": "2026-11-05T02:00:00.000Z",
+     "who": "Adi",
+     "text": "Request sent to Estimator."
+    }
+   ],
+   "acceptedAt": "2026-11-05T08:00:00.000Z",
+   "due": "2026-11-09T10:00:00.000Z",
+   "returnedAt": "2026-11-07T03:00:00.000Z"
+  },
+  "r11": {
+   "enqId": "e-sby-0007",
+   "enqNo": "ENQ-SBY-AND-261103-0007",
+   "dept": "Estimator",
+   "seller": "AND",
+   "region": "SBY",
+   "title": "Budget price for mess hall, 40ft x 3",
+   "urgent": false,
+   "status": "sent",
+   "sentAt": "2026-11-11T02:30:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-11T07:30:00.000Z",
+     "who": "System",
+     "text": "No accept after 4 business hours. Reminder sent to Estimator."
+    },
+    {
+     "t": "2026-11-11T02:30:00.000Z",
+     "who": "Andri",
+     "text": "Request sent to Estimator."
+    }
+   ]
+  },
+  "r12": {
+   "enqId": "e-bpn-0003",
+   "enqNo": "ENQ-BPN-HEN-261030-0003",
+   "dept": "Estimator",
+   "seller": "HEN",
+   "region": "BPN",
+   "title": "Workshop container 40ft x 6, price",
+   "urgent": false,
+   "status": "accepted",
+   "sentAt": "2026-11-09T07:00:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-10T02:00:00.000Z",
+     "who": "Estimator",
+     "text": "Accepted by Estimator."
+    },
+    {
+     "t": "2026-11-09T07:00:00.000Z",
+     "who": "Pak Hendy",
+     "text": "Request sent to Estimator."
+    }
+   ],
+   "acceptedAt": "2026-11-10T02:00:00.000Z",
+   "due": "2026-11-13T10:00:00.000Z"
+  },
+  "r13": {
+   "enqId": "e-bpn-0007",
+   "enqNo": "ENQ-BPN-NOV-261109-0007",
+   "dept": "Drafter",
+   "seller": "NOV",
+   "region": "BPN",
+   "title": "Mess camp layout, 40 persons",
+   "urgent": false,
+   "status": "sent",
+   "sentAt": "2026-11-11T09:00:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-11T09:00:00.000Z",
+     "who": "Novi",
+     "text": "Request sent to Drafter."
+    }
+   ]
+  },
+  "r14": {
+   "enqId": "e-bpn-0006",
+   "enqNo": "ENQ-BPN-REV-261015-0006",
+   "dept": "Purchasing",
+   "seller": "REV",
+   "region": "BPN",
+   "title": "Vendor PO: steel frame",
+   "urgent": false,
+   "status": "accepted",
+   "sentAt": "2026-11-03T02:00:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-03T03:00:00.000Z",
+     "who": "Purchasing",
+     "text": "Accepted by Purchasing. Budget proposal in review."
+    },
+    {
+     "t": "2026-11-03T02:00:00.000Z",
+     "who": "Revita",
+     "text": "Request sent to Purchasing."
+    }
+   ],
+   "acceptedAt": "2026-11-03T03:00:00.000Z",
+   "due": "2026-11-09T10:00:00.000Z"
+  },
+  "r15": {
+   "enqId": "e-jkt-0005",
+   "enqNo": "ENQ-JKT-EVI-261103-0005",
+   "dept": "Drafter",
+   "seller": "EVI",
+   "region": "JKT",
+   "title": "Site office 12 units, stacked 2 levels",
+   "urgent": false,
+   "status": "accepted",
+   "sentAt": "2026-11-04T08:00:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-05T03:00:00.000Z",
+     "who": "Drafter",
+     "text": "Accepted by Drafter."
+    },
+    {
+     "t": "2026-11-04T08:00:00.000Z",
+     "who": "Evi",
+     "text": "Request sent to Drafter."
+    }
+   ],
+   "acceptedAt": "2026-11-05T03:00:00.000Z",
+   "due": "2026-11-11T10:00:00.000Z"
+  },
+  "r16": {
+   "enqId": "e-jkt-0002",
+   "enqNo": "ENQ-JKT-IVA-261101-0002",
+   "dept": "Estimator",
+   "seller": "IVA",
+   "region": "JKT",
+   "title": "Reefer 20ft with genset package, price",
+   "urgent": false,
+   "status": "accepted",
+   "sentAt": "2026-11-05T04:00:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-06T02:00:00.000Z",
+     "who": "Estimator",
+     "text": "Accepted by Estimator."
+    },
+    {
+     "t": "2026-11-05T04:00:00.000Z",
+     "who": "Ivan",
+     "text": "Request sent to Estimator."
+    }
+   ],
+   "acceptedAt": "2026-11-06T02:00:00.000Z",
+   "due": "2026-11-10T10:00:00.000Z"
+  },
+  "r17": {
+   "enqId": "e-jkt-0001",
+   "enqNo": "ENQ-JKT-WEL-261012-0001",
+   "dept": "Trucking",
+   "seller": "WEL",
+   "region": "JKT",
+   "title": "Truck to Cikarang, 6 units",
+   "urgent": false,
+   "status": "accepted",
+   "sentAt": "2026-11-10T02:00:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-10T03:00:00.000Z",
+     "who": "Trucking",
+     "text": "Accepted by Trucking."
+    },
+    {
+     "t": "2026-11-10T02:00:00.000Z",
+     "who": "Welly",
+     "text": "Request sent to Trucking."
+    }
+   ],
+   "acceptedAt": "2026-11-10T03:00:00.000Z",
+   "due": "2026-11-14T10:00:00.000Z"
+  },
+  "r18": {
+   "enqId": "e-jkt-0004",
+   "enqNo": "ENQ-JKT-END-261028-0004",
+   "dept": "Sales Support",
+   "seller": "END",
+   "region": "JKT",
+   "title": "Work order and kickoff meeting",
+   "urgent": false,
+   "status": "accepted",
+   "sentAt": "2026-11-11T03:00:00.000Z",
+   "nudges": 0,
+   "log": [
+    {
+     "t": "2026-11-11T04:00:00.000Z",
+     "who": "Sales Support",
+     "text": "Accepted by Sales Support."
+    },
+    {
+     "t": "2026-11-11T03:00:00.000Z",
+     "who": "Dini",
+     "text": "Work order and kickoff requested after RM approval."
+    }
+   ],
+   "acceptedAt": "2026-11-11T04:00:00.000Z",
+   "due": "2026-11-13T10:00:00.000Z"
+  }
+ },
+ "catalog": {
+  "c01": {
+   "item": "40ft Dry container, cargo-worthy",
+   "category": "Dry 40ft",
+   "mode": "Sale",
+   "price": 48500000,
+   "unit": "per unit"
+  },
+  "c02": {
+   "item": "20ft Dry container, cargo-worthy",
+   "category": "Dry 20ft",
+   "mode": "Sale",
+   "price": 27500000,
+   "unit": "per unit"
+  },
+  "c03": {
+   "item": "20ft Reefer container",
+   "category": "Reefer 20ft",
+   "mode": "Sale",
+   "price": 115000000,
+   "unit": "per unit"
+  },
+  "c04": {
+   "item": "40ft Reefer container",
+   "category": "Reefer 40ft",
+   "mode": "Sale",
+   "price": 165000000,
+   "unit": "per unit"
+  },
+  "c05": {
+   "item": "20ft Office container, standard",
+   "category": "Modification",
+   "mode": "Sale",
+   "price": 68000000,
+   "unit": "per unit"
+  },
+  "c06": {
+   "item": "Modular office unit 6 x 3 m",
+   "category": "Modular",
+   "mode": "Sale",
+   "price": 82000000,
+   "unit": "per unit"
+  },
+  "c07": {
+   "item": "20ft Dry container rental, per month",
+   "category": "Dry 20ft",
+   "mode": "Rental",
+   "price": 1900000,
+   "unit": "per unit per month"
+  },
+  "c08": {
+   "item": "20ft Reefer rental, per month",
+   "category": "Reefer 20ft",
+   "mode": "Rental",
+   "price": 9500000,
+   "unit": "per unit per month"
+  },
+  "c09": {
+   "item": "Delivery within the city, per unit",
+   "category": "Service",
+   "mode": "Service",
+   "price": 1200000,
+   "unit": "per unit, one way"
+  }
+ },
+ "meta": {
+  "config": {
+   "demoNow": "2026-11-12T10:00:00+07:00",
+   "note": "Demo clock for the sample data. Remove this field to run on the live clock."
+  }
+ }
+}

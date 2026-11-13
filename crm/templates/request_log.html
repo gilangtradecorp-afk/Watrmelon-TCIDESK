@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="top"><div><a class="b g s" href="{{ url_for('hub.board') }}">&larr; Hub</a>
+<h1 style="margin-top:6px">Request {{ r.dept }} · <span class="mono">{{ r.enquiry.enq_no }}</span></h1>
+<div class="sub">{{ r.title }}</div></div><span class="pill {{ st.cls }}">{{ st.t }}</span></div>
+<div class="card"><div class="kv"><span>Dikirim</span><b>{{ r.sent_at|dt }}</b><span>Diterima</span><b>{{ r.accepted_at|dt }}</b><span>Target</span><b>{{ r.due|dt }}</b><span>Selesai</span><b>{{ r.returned_at|dt }}</b><span>Colekan</span><b>{{ r.nudges }}</b>{% if r.reason %}<span>Alasan</span><b>{{ r.reason }}</b>{% endif %}</div></div>
+<div class="card"><h2>Log</h2><ul class="tl">{% for a in acts %}<li><em>{{ a.t|dt }}</em><b>{{ a.who }}:</b> {{ a.text }}</li>{% endfor %}</ul></div>
+{% endblock %}

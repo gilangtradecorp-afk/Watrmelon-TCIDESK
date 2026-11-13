@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% from "_m.html" import stage %}
+{% block main %}
+<div class="top"><div><h1>Penawaran</h1><div class="sub">Dua template, Sale dan Rental. Harga dari daftar harga bersama, PPN dan diskon dihitung otomatis.</div></div>
+{% if current_user.role in ('sales','rm','admin') and open_enq %}<form method="get" class="row" onsubmit="location.href='{{ url_for('sales.build', eid=0) }}'.replace('/0/', '/' + this.e.value + '/'); return false;">
+ <select name="e" aria-label="Enquiry">{% for x in open_enq %}<option value="{{ x.id }}">{{ x.enq_no }} · {{ x.customer.company }}</option>{% endfor %}</select><button class="b">Buat penawaran</button></form>{% endif %}
+</div>
+<div class="card"><h2>Penawaran terakhir per enquiry <small>{{ rows|length }}</small></h2>
+{% if rows %}<div class="scroll"><table><tr><th>Nomor</th><th>Pelanggan</th><th>Rev</th><th>Total</th><th>Status</th><th>Tahap</th><th></th></tr>
+{% for e in rows %}{% set q = e.quote %}<tr class="click" data-href="{{ url_for('enquiries.detail', eid=e.id) }}"><td class="mono">{{ e.enq_no }}</td><td>{{ e.customer.company }}</td><td>{{ q.rev }} · {{ q.tpl }}</td><td class="mono">{{ q.total|rps }}</td>
+<td><span class="pill {{ 'warn' if q.status == 'waiting' else 'mute' if q.status == 'rejected' else 'ok' }}">{{ {'waiting':'Menunggu RM','sent':'Terkirim','rejected':'Ditolak RM'}[q.status] }}</span></td><td>{{ stage(e) }}</td><td><a class="b g s" href="{{ url_for('sales.pdf', qid=q.id) }}">PDF</a></td></tr>{% endfor %}
+</table></div>{% else %}<p class="note">Belum ada penawaran.</p>{% endif %}
+</div>
+{% endblock %}

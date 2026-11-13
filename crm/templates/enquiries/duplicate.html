@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% from "_m.html" import csrf, stage %}
+{% block main %}
+<h1>Pelanggan ini sudah punya enquiry</h1>
+<p class="note">Ditemukan lewat email, telepon, atau nama perusahaan (tanpa PT/CV) dalam jendela 60 hari. Kiriman ulang bukan enquiry baru.</p>
+<div class="card">
+ <ul class="chk">
+ {% for x in dups %}
+  <li>
+   <span><span class="mono">{{ x.enq_no }}</span> {{ stage(x) }}{% if current_user.region and x.region != current_user.region %} <span class="pill warn">region {{ x.region }}</span>{% endif %}<br><span class="note">{{ x.customer.company }} · {{ x.product }} · pemilik {{ x.seller_code }}</span></span>
+   <form method="post" action="{{ url_for('enquiries.resend', eid=x.id) }}" style="margin-left:auto">{{ csrf() }}
+    <input type="hidden" name="source" value="{{ f.source }}"><input type="hidden" name="product" value="{{ f.product }}">
+    <button class="b s">Catat sebagai kiriman ulang di sini</button>
+   </form>
+  </li>
+ {% endfor %}
+ </ul>
+</div>
+<form method="post" action="{{ url_for('enquiries.new') }}" class="card">{{ csrf() }}
+ {% for k, v in f.items() if k not in ('csrf_token','decision','customer_id','linked_to') %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}
+ <input type="hidden" name="decision" value="linked">
+ <input type="hidden" name="customer_id" value="{{ dups[0].customer_id }}">
+ <input type="hidden" name="linked_to" value="{{ dups[0].id }}">
+ <p style="margin-top:0">Kalau ini kebutuhan baru dari pelanggan yang sama:{% if current_user.region and dups[0].region != current_user.region %} pelanggan ini dipegang region {{ dups[0].region }}, jadi RM Anda akan diminta memutuskan siapa yang menangani.{% endif %}</p>
+ <button class="b g">Kebutuhan baru: buat enquiry terhubung</button>
+</form>
+{% endblock %}

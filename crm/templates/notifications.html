@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Notifikasi</h1>
+<div class="card">{% if items %}<ul class="tl" style="max-height:none">{% for n in items %}<li><em>{{ n.t|dt }}</em>{% if not n.read %}<b>Baru · </b>{% endif %}{% if n.link %}<a href="{{ n.link }}">{{ n.text }}</a>{% else %}{{ n.text }}{% endif %}</li>{% endfor %}</ul>{% else %}<p class="note">Belum ada notifikasi.</p>{% endif %}</div>
+{% endblock %}

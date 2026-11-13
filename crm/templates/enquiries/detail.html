@@ -1,0 +1,156 @@
+{% extends "base.html" %}{% from "_m.html" import csrf, tier, stage, slap, msg_list %}
+{% block title %}{{ e.enq_no }} · Tradecorp CRM{% endblock %}
+{% block main %}
+{% set c = e.customer %}
+<div class="top">
+ <div>
+  <a class="b g s" href="{{ url_for('enquiries.index') }}">&larr; Daftar enquiry</a>
+  <h1 class="mono" style="font-size:19px;margin-top:6px">{{ e.enq_no }}</h1>
+  <div class="sub">{{ c.company }} · {{ e.product }} · Sumber {{ e.source }} · Masuk {{ e.received|dt }} · Pemilik {{ e.seller_code }}{% if e.first_owner and e.first_owner != e.seller_code %} (pemilik awal {{ e.first_owner }}){% endif %}{% if e.linked_to %} · terhubung ke enquiry sebelumnya{% endif %}</div>
+ </div>
+ <div class="row">{{ tier(e) }}<span class="pill">Skor {{ e.score }}</span>{{ stage(e) }}{{ slap(s) if e.is_open }}</div>
+</div>
+
+{% if edit or rm %}
+<div class="row">
+ {% if edit and e.status == 'New' %}
+ <details class="act"><summary class="b">Tandai sudah dihubungi</summary><form class="pop" method="post" enctype="multipart/form-data" action="{{ url_for('enquiries.contacted', eid=e.id) }}">{{ csrf() }}
+  <div class="fr"><label for="how">Lewat</label><select id="how" name="how"><option>WhatsApp</option><option>Telepon</option><option>Email</option><option>Kunjungan</option></select></div>
+  <div class="fr"><label for="cn">Apa yang dibicarakan *</label><textarea id="cn" name="note" rows="3" required></textarea></div>
+  <div class="fr"><label for="cf">Bukti: screenshot WA / email</label><input id="cf" name="file" type="file" accept="image/*,.pdf"></div>
+  <div class="fr"><label for="cp">atau keterangan bukti (judul email, jam telepon)</label><input id="cp" name="proof"></div>
+  <button class="b">Simpan</button></form></details>
+ {% endif %}
+ {% if edit %}
+ <details class="act"><summary class="b {{ 'g' if e.status == 'New' }}">Update status</summary><form class="pop" method="post" action="{{ url_for('enquiries.status', eid=e.id) }}">{{ csrf() }}
+  <div class="fr"><label for="st">Status</label><select id="st" name="status">{% for x in STATUS if x != 'New' %}<option {{ 'selected' if (e.status == x or (e.status == 'New' and x == 'Contacted')) }}>{{ x }}</option>{% endfor %}</select></div>
+  <div class="fr"><label for="loss">Alasan kalah (wajib kalau Lost)</label><select id="loss" name="loss"><option value="">–</option>{% for x in LOSS %}<option>{{ x }}</option>{% endfor %}</select></div>
+  <div class="fr"><label for="close">Alasan tidak prospek (wajib kalau Not prospectable)</label><select id="close" name="close"><option value="">–</option>{% for x in NOT_PROSPECT %}<option>{{ x }}</option>{% endfor %}</select></div>
+  <div class="fr"><label for="sn">Komentar: apa yang ditunggu, apa yang berubah *</label><textarea id="sn" name="note" rows="3" required></textarea></div>
+  <button class="b">Simpan</button></form></details>
+ <details class="act"><summary class="b g">Catat follow-up</summary><form class="pop" method="post" enctype="multipart/form-data" action="{{ url_for('enquiries.followup', eid=e.id) }}">{{ csrf() }}
+  <div class="fr"><label for="fn">Apa yang terjadi, apa yang berubah *</label><textarea id="fn" name="note" rows="3" required></textarea></div>
+  <div class="fr"><label for="ff">Bukti: screenshot WA / email</label><input id="ff" name="file" type="file" accept="image/*,.pdf"></div>
+  <div class="fr"><label for="fp">atau keterangan bukti</label><input id="fp" name="proof"></div>
+  <button class="b">Simpan</button></form></details>
+ {% if e.is_open %}
+ <details class="act"><summary class="b g">Kirim request ke tim</summary><form class="pop" method="post" action="{{ url_for('enquiries.send_request', eid=e.id) }}">{{ csrf() }}
+  <p class="note" style="margin:0">Lead time minimum: Drafter 3 hari, Estimator 2 hari. Request yang tidak lengkap dikembalikan.</p>
+  <div class="fr"><label for="dept">Tim</label><select id="dept" name="dept">{% for d in DEPT_NAMES %}<option>{{ d }}</option>{% endfor %}</select></div>
+  <div class="fr"><label for="rt">Kebutuhan: produk, ukuran, jumlah, lokasi, syarat khusus *</label><textarea id="rt" name="title" rows="3" required></textarea></div>
+  <div class="fr ck"><input type="checkbox" id="cat" name="catalog"><label for="cat">Sudah cek katalog, tidak ada desain standar yang cocok</label></div>
+  <div class="fr ck"><input type="checkbox" id="urg" name="urgent" {{ 'disabled' if quota[0] >= quota[1] }}><label for="urg">Urgent (besok). Perlu persetujuan RM · kuota minggu ini {{ quota[0] }} dari {{ quota[1] }}</label></div>
+  <button class="b">Kirim request</button></form></details>
+ <a class="b g" href="{{ url_for('sales.build', eid=e.id) }}">Buat penawaran</a>
+ {% endif %}
+ {% if e.status in ('Lost', 'Not prospectable') %}
+ <form class="inline" method="post" action="{{ url_for('enquiries.reopen', eid=e.id) }}">{{ csrf() }}<button class="b g">Buka lagi (pelanggan kembali)</button></form>
+ {% endif %}
+ {% endif %}
+ {% if rm and e.is_open and reassign_to %}
+ <details class="act"><summary class="b g">Alihkan ke sales lain</summary><form class="pop" method="post" action="{{ url_for('enquiries.reassign', eid=e.id) }}">{{ csrf() }}
+  <div class="fr"><label for="to">Ke</label><select id="to" name="to">{% for p in reassign_to %}<option value="{{ p.code }}">{{ p.name }} · {{ p.code }}</option>{% endfor %}</select></div>
+  <div class="fr"><label for="why">Alasan</label><input id="why" name="reason" placeholder="Cuti, resign, beban kerja, belum dihubungi 8 jam"></div>
+  <button class="b">Alihkan</button></form></details>
+ {% endif %}
+</div>
+{% endif %}
+
+{% if dup_other %}<div class="flash warn"><b>Duplikat lintas region:</b> pelanggan ini juga dipegang {{ dup_other.seller_code }} di {{ dup_other.region }} (<span class="mono">{{ dup_other.enq_no }}</span>, {{ dup_other.stage }}).
+ {% if rm %}<form class="inline" method="post" action="{{ url_for('enquiries.dup_decide', eid=e.id) }}">{{ csrf() }}<input type="hidden" name="next" value="{{ request.path }}"><button class="b s" name="choice" value="keep">Tetap di {{ e.region }}</button> <button class="b g s" name="choice" value="handover">Serahkan ke {{ dup_other.region }}</button></form>{% else %}Menunggu keputusan RM.{% endif %}</div>{% endif %}
+
+<div class="grid2">
+<div class="col">
+ <div class="card"><h2>Jam SLA <small>jam kerja {{ e.region }}</small></h2>
+  <ul class="chk">{% for ok, t in clock %}<li><span style="color:var(--{{ 'ok' if ok else 'bad' }})">{{ '✓' if ok else '!' }}</span> {{ t }}</li>{% endfor %}</ul>
+ </div>
+ <div class="card"><h2>Pelanggan</h2><div class="kv">
+  <span>Kontak</span><b>{{ c.contact or '–' }}</b><span>Perusahaan</span><b>{{ c.company }}</b>
+  <span>Telepon / email</span><b>{{ c.phone or '–' }} · {{ c.email or '–' }}</b><span>Lini bisnis</span><b>{{ e.line or '–' }} · {{ e.type or '–' }}</b>
+  <span>Produk</span><b>{{ e.product }}</b><span>Lokasi</span><b>{{ e.location or '–' }}</b><span>Jumlah</span><b>{{ e.qty or '–' }}</b>
+  <span>Dibutuhkan</span><b>{{ e.date_needed or '–' }}</b><span>Harga dibutuhkan</span><b>{{ e.pricing_deadline or '–' }}</b>
+  {% if e.loss_reason %}<span>Alasan kalah</span><b>{{ e.loss_reason }}</b>{% endif %}
+  {% if e.close_reason %}<span>Alasan tidak prospek</span><b>{{ e.close_reason }}</b>{% endif %}
+ </div></div>
+
+ <div class="card"><h2>Skor KYC <small>{{ e.score }} dari 100 · awal {{ e.intake_score }}</small></h2>
+  <form method="post" action="{{ url_for('enquiries.kyc', eid=e.id) }}">{{ csrf() }}
+  <ul class="chk">
+   {% for k, label, p in KYC %}<li><input type="checkbox" id="k_{{ k }}" name="{{ k }}" {{ 'checked' if (e.kyc or {}).get(k) }} {{ '' if edit else 'disabled' }}><label for="k_{{ k }}">{{ label }}</label><b class="p">{{ p }}</b></li>{% endfor %}
+   <li><input type="checkbox" id="k_pc" name="price_check" {{ 'checked' if e.price_check }} {{ '' if edit else 'disabled' }}><label for="k_pc">Hanya cek harga (rentang harga katalog, tanpa Drafter/Estimator)</label></li>
+  </ul>
+  {% if edit %}<button class="b s" style="margin-top:6px">Simpan KYC</button>{% endif %}
+  </form>
+  <h2 style="margin-top:12px">Tanda merah <small>−10 per tanda</small></h2>
+  {% if e.red_flags %}<ul class="chk">{% for f in e.red_flags %}<li><span>{{ f.reason }} <span class="note">· {{ f.who }}</span></span>
+   {% if edit %}<form class="inline" method="post" action="{{ url_for('enquiries.redflag', eid=e.id) }}" style="margin-left:auto">{{ csrf() }}<input type="hidden" name="remove" value="{{ loop.index0 }}"><button class="b g s" aria-label="Hapus tanda merah">Hapus</button></form>{% endif %}</li>{% endfor %}</ul>
+  {% else %}<p class="note">Tidak ada.</p>{% endif %}
+  {% if edit %}<form class="row" method="post" action="{{ url_for('enquiries.redflag', eid=e.id) }}">{{ csrf() }}<input name="reason" placeholder="Alasan tanda merah" aria-label="Alasan tanda merah" style="flex:1"><button class="b g s">+ Tanda merah</button></form>{% endif %}
+  <p class="note">Tier A 70+, B 40–69, C di bawah 40. Identitas wajib sebelum request ke Drafter atau Estimator.</p>
+ </div>
+
+ {% if e.status == 'Won' %}
+ <div class="card"><h2>Checklist serah-terima PO <small>{{ e.stage }}</small></h2>
+  {% set po_edit = edit and e.stage == 'PO received' %}
+  <form method="post" action="{{ url_for('enquiries.po', eid=e.id) }}">{{ csrf() }}
+   <div class="form2" style="margin-bottom:8px">
+    <div class="fr"><label for="pon">Nomor PO</label><input id="pon" name="po_number" value="{{ e.po_number or '' }}" {{ '' if po_edit else 'disabled' }}></div>
+    <div class="fr"><label for="pov">Nilai PO (Rp)</label><input id="pov" name="po_value" value="{{ e.po_value or '' }}" inputmode="numeric" {{ '' if po_edit else 'disabled' }}></div>
+   </div>
+   <ul class="chk">{% for k, label in PO_CHECK %}<li><input type="checkbox" id="po_{{ k }}" name="{{ k }}" {{ 'checked' if (e.po or {}).get(k) }} {{ '' if po_edit else 'disabled' }}><label for="po_{{ k }}">{{ label }}</label></li>{% endfor %}</ul>
+   {% if po_edit %}<button class="b g s" style="margin-top:6px">Simpan checklist</button>{% endif %}
+  </form>
+  <div class="row" style="margin-top:8px">
+   {% if po_edit %}<form class="inline" method="post" action="{{ url_for('enquiries.po_send', eid=e.id) }}">{{ csrf() }}<button class="b">Kirim paket ke RM untuk disetujui</button></form>{% endif %}
+   {% if rm and e.stage == 'WO approval' %}<form class="inline" method="post" action="{{ url_for('enquiries.po_approve', eid=e.id) }}">{{ csrf() }}<button class="b">Setujui, buka work order</button></form>
+   {% elif e.stage == 'WO approval' %}<p class="note">Menunggu persetujuan RM.</p>{% endif %}
+   {% set i = WON_STAGES.index(e.stage) if e.stage in WON_STAGES else -1 %}
+   {% if edit and i >= 2 and i < WON_STAGES|length - 1 %}<form class="inline" method="post" action="{{ url_for('enquiries.next_stage', eid=e.id) }}">{{ csrf() }}<button class="b">Pindah ke: {{ WON_STAGES[i + 1] }}</button></form>{% endif %}
+  </div>
+ </div>
+ {% endif %}
+
+ <div class="card"><h2>Pelanggan sama <small>cek duplikat, 60 hari</small></h2>
+  {% if same %}<ul class="chk">{% for x in same %}<li><a class="mono" href="{{ url_for('enquiries.detail', eid=x.id) }}">{{ x.enq_no }}</a> {{ stage(x) }} <span class="note">{{ x.product }} · {{ x.seller_code }}</span></li>{% endfor %}</ul>
+  {% else %}<p class="note">Tidak ada enquiry lain dari pelanggan ini.</p>{% endif %}
+ </div>
+</div>
+
+<div class="col">
+ <div class="card thread" data-poll="{{ url_for('chat.poll', cid=ch.id) }}" data-last="{{ msgs[-1].id if msgs else 0 }}">
+  <h2>Diskusi enquiry <small>chat tim, ketik @kode untuk menyebut orang</small></h2>
+  <div class="msgs">{{ msg_list(msgs) }}{% if not msgs %}<p class="note">Belum ada diskusi.</p>{% endif %}</div>
+  {% if current_user.role != 'mgmt' %}
+  <form class="composer" method="post" action="{{ url_for('chat.send', cid=ch.id) }}" enctype="multipart/form-data">{{ csrf() }}
+   <input type="hidden" name="next" value="{{ request.path }}">
+   <textarea name="text" rows="1" placeholder="Tulis pesan… (Enter kirim, Shift+Enter baris baru)" aria-label="Pesan"></textarea>
+   <input type="file" name="file" aria-label="Lampiran" style="max-width:190px">
+   <button class="b">Kirim</button>
+  </form>{% endif %}
+ </div>
+
+ <div class="card"><h2>Log aktivitas <small>terbaru di atas</small></h2>
+  <ul class="tl">{% for a in acts %}<li><em>{{ a.t|dt }}</em><b>{{ a.who }}:</b> {{ a.text }}{% if a.file_path %} <a href="{{ url_for('enquiries.activity_file', aid=a.id) }}">📎 {{ a.file_name }}</a>{% endif %}</li>{% else %}<li>Belum ada aktivitas</li>{% endfor %}</ul>
+ </div>
+
+ <div class="card"><h2>Revisi <small>semua di bawah satu nomor ENQ</small></h2>
+  {% if revisions %}<ul class="chk">{% for label, st, t in revisions %}<li>{{ label }} <span class="pill mute">{{ st }}</span><span class="note" style="margin-left:auto">{{ t|dt }}</span></li>{% endfor %}</ul>
+  {% else %}<p class="note">Belum ada revisi gambar, harga, atau penawaran.</p>{% endif %}
+ </div>
+
+ <div class="card"><h2>Request ke tim <small>{{ e.requests|length }}</small></h2>
+  {% if e.requests %}<div class="scroll"><table><tr><th>Tim</th><th>Kebutuhan</th><th>Status</th><th></th></tr>
+  {% for r in e.requests %}{% set st = rstate(r) %}<tr><td>{{ r.dept }}{% if r.urgent %} <span class="pill warn">urgent</span>{% endif %}</td><td>{{ r.title }}</td><td><span class="pill {{ st.cls }}">{{ st.t }}</span></td><td><a class="b g s" href="{{ url_for('hub.history', rid=r.id) }}">Log</a></td></tr>{% endfor %}
+  </table></div>{% else %}<p class="note">Belum ada request.</p>{% endif %}
+ </div>
+
+ <div class="card"><h2>Penawaran <small>{{ e.quotes|length }} revisi</small></h2>
+  {% if e.quotes %}<div class="scroll"><table><tr><th>Rev</th><th>Template</th><th>Total</th><th>Status</th><th></th></tr>
+  {% for q in e.quotes %}<tr><td>{{ q.rev }}</td><td>{{ q.tpl }}</td><td class="mono">{{ q.total|rp }}</td>
+   <td><span class="pill {{ 'warn' if q.status == 'waiting' else 'mute' if q.status == 'rejected' else 'ok' }}">{{ {'waiting':'Menunggu RM','sent':'Terkirim','rejected':'Ditolak RM'}[q.status] }}</span>{% if q.discount_pct %} <span class="note">diskon {{ q.discount_pct|round(1) }}%</span>{% endif %}</td>
+   <td class="acts"><a class="b g s" href="{{ url_for('sales.pdf', qid=q.id) }}">PDF</a>{% if q.status == 'sent' %}<button type="button" class="b g s" data-copy="{{ wa_text(e, q) }}">Salin pesan WA</button>{% endif %}</td></tr>{% endfor %}
+  </table></div>{% else %}<p class="note">Belum ada penawaran.</p>{% endif %}
+ </div>
+</div>
+</div>
+{% endblock %}

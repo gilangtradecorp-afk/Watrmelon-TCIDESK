@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% from "_m.html" import enq_table %}
+{% block main %}
+<div class="top">
+ <div><h1>Enquiry</h1><div class="sub">{{ rows|length }} ditampilkan</div></div>
+ <form class="row" method="get">
+  {% if current_user.role in ('mgmt','admin') %}<select name="region" aria-label="Region" onchange="this.form.submit()"><option value="">Semua region</option>{% for r in REGIONS %}<option {{ 'selected' if region == r }}>{{ r }}</option>{% endfor %}</select>{% endif %}
+  <select name="status" aria-label="Status" onchange="this.form.submit()">
+   <option value="open" {{ 'selected' if st == 'open' }}>Terbuka</option><option value="all" {{ 'selected' if st == 'all' }}>Semua</option>
+   {% for s in STATUS %}<option {{ 'selected' if st == s }}>{{ s }}</option>{% endfor %}
+  </select>
+  <input name="q" value="{{ text }}" placeholder="Cari nomor, pelanggan, produk" aria-label="Cari">
+  <button class="b g">Cari</button>
+  {% if current_user.role in ('sales','rm','admin') %}<a class="b" href="{{ url_for('enquiries.new') }}">+ Catat enquiry</a>{% endif %}
+ </form>
+</div>
+<div class="card">{{ enq_table(rows, sla, 'Tidak ada enquiry yang cocok.') }}</div>
+{% endblock %}

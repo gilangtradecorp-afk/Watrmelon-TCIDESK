@@ -1,0 +1,31 @@
+{% extends "base.html" %}{% from "_m.html" import csrf %}
+{% block main %}
+<div class="top"><div><a class="b g s" href="{{ url_for('enquiries.detail', eid=e.id) }}">&larr; {{ e.enq_no }}</a>
+<h1 style="margin-top:6px">Penawaran rev.{{ (e.quote.rev if e.quote else 0) + 1 }}</h1>
+<div class="sub">{{ e.customer.company }} · {{ e.customer.contact or '' }} · {{ e.product }}</div></div>
+<form method="get" class="row"><label for="tpl" class="note">Template</label><select id="tpl" name="tpl" onchange="this.form.submit()"><option {{ 'selected' if tpl == 'Sale' }}>Sale</option><option {{ 'selected' if tpl == 'Rental' }}>Rental</option></select></form>
+</div>
+<form method="post" class="card" style="display:flex;flex-direction:column;gap:12px">{{ csrf() }}
+ <input type="hidden" name="tpl" value="{{ tpl }}"><input type="hidden" name="save" value="1">
+ <div class="scroll"><table>
+  <tr><th>Item dari daftar harga</th><th>atau item custom</th><th>Harga custom (Rp) · kosongkan untuk minta ke Estimator</th><th>Jumlah</th></tr>
+  {% for i in rows %}<tr>
+   <td><select name="cat{{ i }}" aria-label="Item {{ i + 1 }}"><option value="">–</option>{% for c in items %}<option value="{{ c.id }}">[{{ c.mode }}] {{ c.item }} – {{ c.price|rp }} {{ c.unit or '' }}</option>{% endfor %}</select></td>
+   <td><input name="custom{{ i }}" aria-label="Item custom {{ i + 1 }}" style="width:100%"></td>
+   <td><input name="price{{ i }}" inputmode="numeric" aria-label="Harga custom {{ i + 1 }}" style="width:130px"></td>
+   <td><input name="qty{{ i }}" type="number" min="0" style="width:80px" aria-label="Jumlah {{ i + 1 }}"></td></tr>{% endfor %}
+ </table></div>
+ <div class="form2">
+  <div class="fr"><label for="discount">Diskon (%) · di atas {{ limit|round(1) }}% perlu persetujuan RM</label><input id="discount" name="discount" value="0" inputmode="decimal"></div>
+  <div class="fr"><label for="ppn">PPN (%)</label><input id="ppn" name="ppn" value="{{ ppn }}" inputmode="decimal"></div>
+  <div class="fr"><label for="pt">Syarat pembayaran</label><input id="pt" name="payment_terms" value="{{ terms }}"></div>
+  <div class="fr"><label for="dd">Pengiriman (hari kerja setelah DP)</label><input id="dd" name="delivery_days" type="number" min="0" value="{{ delivery }}"></div>
+  {% if tpl == 'Rental' %}
+  <div class="fr"><label for="months">Periode sewa (bulan)</label><input id="months" name="months" type="number" min="1"></div>
+  <div class="fr"><label for="deposit">Deposit (Rp)</label><input id="deposit" name="deposit" inputmode="numeric"></div>
+  {% endif %}
+ </div>
+ <p class="note" style="margin:0">Berlaku {{ valid }} hari. Item custom tanpa harga otomatis dikirim ke Estimator dan penawaran belum dibuat. Setelah Estimator mengembalikan harga, RM sebaiknya menambahkannya ke daftar harga. Total dihitung saat disimpan dan bisa dilihat di PDF.</p>
+ <div class="row"><button class="b">Simpan dan tandai terkirim</button></div>
+</form>
+{% endblock %}

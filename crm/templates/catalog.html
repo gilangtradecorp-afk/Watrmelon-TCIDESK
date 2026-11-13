@@ -1,0 +1,28 @@
+{% extends "base.html" %}{% from "_m.html" import csrf %}
+{% block main %}
+<div class="top"><div><h1>Daftar harga</h1><div class="sub">{{ 'RM dan admin bisa mengubah harga. Setiap perubahan tercatat.' if can_edit else 'Hanya RM yang bisa mengubah harga.' }}</div></div></div>
+<div class="card"><div class="scroll"><table>
+ <tr><th>Item</th><th>Kategori</th><th>Mode</th><th>Harga</th><th>Satuan</th><th>Aktif</th><th>Terakhir diubah</th>{% if can_edit %}<th></th>{% endif %}</tr>
+ {% for c in items %}<tr>
+  <td>{{ c.item }}</td><td>{{ c.category }}</td><td>{{ c.mode }}</td>
+  <td>{% if can_edit %}<input form="cf{{ c.id }}" name="price" value="{{ c.price }}" inputmode="numeric" style="width:130px" aria-label="Harga {{ c.item }}">{% else %}<span class="mono">{{ c.price|rp }}</span>{% endif %}</td>
+  <td>{{ c.unit }}</td>
+  <td>{% if can_edit %}<input form="cf{{ c.id }}" type="checkbox" name="active" {{ 'checked' if c.active }} aria-label="Aktif">{% else %}{{ 'Ya' if c.active else 'Tidak' }}{% endif %}</td>
+  <td class="note">{{ c.updated_at|dt if c.updated_at else '–' }} {{ c.updated_by or '' }}</td>
+  {% if can_edit %}<td><form id="cf{{ c.id }}" method="post">{{ csrf() }}<input type="hidden" name="id" value="{{ c.id }}"><button class="b s">Simpan</button></form></td>{% endif %}
+ </tr>{% endfor %}
+</table></div></div>
+{% if can_edit %}
+<form method="post" class="card">{{ csrf() }}<h2>Tambah item</h2>
+ <div class="form2">
+  <div class="fr"><label for="ni">Nama item</label><input id="ni" name="item" required></div>
+  <div class="fr"><label for="nc">Kategori</label><input id="nc" name="category"></div>
+  <div class="fr"><label for="nm">Mode</label><select id="nm" name="mode"><option>Sale</option><option>Rental</option><option>Service</option></select></div>
+  <div class="fr"><label for="np">Harga (Rp)</label><input id="np" name="price" inputmode="numeric" required></div>
+  <div class="fr"><label for="nu">Satuan</label><input id="nu" name="unit" placeholder="per unit"></div>
+ </div><button class="b" style="margin-top:8px">Tambah</button></form>
+{% endif %}
+<div class="card"><h2>Riwayat perubahan harga</h2>
+{% if hist %}<ul class="tl">{% for h in hist %}<li><em>{{ h.t|dt }}</em><b>{{ h.who }}:</b> {{ names.get(h.item_id, '?') }} {{ h.old|rp }} → {{ h.new|rp }}</li>{% endfor %}</ul>{% else %}<p class="note">Belum ada perubahan.</p>{% endif %}
+</div>
+{% endblock %}

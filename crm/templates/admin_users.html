@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% from "_m.html" import csrf %}
+{% block main %}
+<h1>Pengguna</h1>
+<div class="card"><div class="scroll"><table>
+ <tr><th>Nama</th><th>Username</th><th>Peran</th><th>Region / tim</th><th>Kode</th><th>Aktif</th><th>Reset password</th><th></th></tr>
+ {% for u in users %}<tr>
+  <td>{{ u.name }}</td><td class="mono">{{ u.username }}</td><td>{{ ROLES[u.role] }}</td><td>{{ u.region or u.team or '–' }}</td><td class="mono">{{ u.code or '–' }}</td>
+  <td><input form="uf{{ u.id }}" type="checkbox" name="active" {{ 'checked' if u.active }} aria-label="Aktif"></td>
+  <td><input form="uf{{ u.id }}" name="password" type="password" placeholder="kosongkan kalau tidak diganti" aria-label="Password baru" style="width:200px"></td>
+  <td><form id="uf{{ u.id }}" method="post">{{ csrf() }}<input type="hidden" name="id" value="{{ u.id }}"><button class="b s">Simpan</button></form></td>
+ </tr>{% endfor %}
+</table></div></div>
+<form method="post" class="card">{{ csrf() }}<h2>Tambah pengguna</h2>
+ <div class="form2">
+  <div class="fr"><label for="nu">Username</label><input id="nu" name="username" required></div>
+  <div class="fr"><label for="nn">Nama</label><input id="nn" name="name" required></div>
+  <div class="fr"><label for="nr">Peran</label><select id="nr" name="role">{% for k, v in ROLES.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></div>
+  <div class="fr"><label for="ng">Region (sales / RM)</label><select id="ng" name="region">{% for r in REGIONS %}<option>{{ r }}</option>{% endfor %}</select></div>
+  <div class="fr"><label for="nt">Tim (tim support)</label><select id="nt" name="team">{% for d in DEPT_NAMES %}<option>{{ d }}</option>{% endfor %}</select></div>
+  <div class="fr"><label for="nk">Kode sales (3 huruf, untuk nomor ENQ)</label><input id="nk" name="code" maxlength="6"></div>
+  <div class="fr"><label for="nh">Telepon</label><input id="nh" name="phone"></div>
+  <div class="fr"><label for="np">Password awal (min. 8)</label><input id="np" name="password" type="password" minlength="8" required></div>
+ </div><button class="b" style="margin-top:8px">Tambah</button></form>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}{% from "_m.html" import kpi, csrf, bars as barchart %}
+{% block main %}
+<div class="top">
+ <div><h1>Beban kerja & interaksi tim</h1><div class="sub">{{ 'Hari ini' if period == 'today' else 'Bulan berjalan' }}. Sales melihat barisnya sendiri, RM satu region, manajemen semua.</div></div>
+ <form method="get" class="row">
+  <select name="p" onchange="this.form.submit()" aria-label="Periode"><option value="today" {{ 'selected' if period == 'today' }}>Hari ini</option><option value="mtd" {{ 'selected' if period == 'mtd' }}>Bulan ini</option></select>
+  {% if all_sellers|length > 1 %}<select name="s" onchange="this.form.submit()" aria-label="Sales"><option value="">Semua sales</option>{% for p in all_sellers %}<option value="{{ p.code }}" {{ 'selected' if seller_f == p.code }}>{{ p.name }} · {{ p.code }}</option>{% endfor %}</select>{% endif %}
+  {% if current_user.role in ('mgmt','admin') %}<select name="region" onchange="this.form.submit()" aria-label="Region"><option value="">Semua region</option>{% for r in REGIONS %}<option {{ 'selected' if reg == r }}>{{ r }}</option>{% endfor %}</select>{% endif %}
+ </form>
+</div>
+<div class="kpis">
+ {{ kpi('Enquiry hari ini', today_count, 'bulan ini ' ~ mtd_count) }}
+ {{ kpi('Request ' ~ ('hari ini' if period == 'today' else 'bulan ini'), R|length, 'ke ' ~ resp|length ~ ' tim') }}
+ {{ kpi('Request telat', late, 'lewat target tim', late > 0) }}
+ {{ kpi('Belum ditanggapi', nf|length, 'tanpa terima, tolak, atau komentar', nf|length > 0) }}
+ {{ kpi('Diam terlama', nf[0] and (st[nf[0].id].h|hrs) or '–', nf[0].dept if nf else '') }}
+</div>
+<div class="grid2">
+<div class="col">
+ <div class="card"><h2>Request sales per tim <small>bulan ini</small></h2>{{ barchart(bars, mx) }}</div>
+ <div class="card"><h2>Sales × tim <small>angka merah = belum ditanggapi</small></h2><div class="scroll"><table class="num">
+  <tr><th>Sales</th>{% for d in resp %}<th>{{ d.replace('Sales Support','Support') }}</th>{% endfor %}<th>Total</th></tr>
+  {% for p in sellers %}{% set x = per[p.code] %}<tr><td><b>{{ p.name }}</b> {{ p.code }}</td>
+   {% for d in resp %}{% set n, f = x.dept[d] %}<td>{{ n or '·' }}{% if f %}<span class="nf">{{ f }}</span>{% endif %}</td>{% endfor %}
+   <td><b>{{ x.total }}</b></td></tr>{% endfor %}
+ </table></div></div>
+ <div class="card"><h2>Responsivitas tim <small>bagaimana tiap tim membalas sales</small></h2><div class="scroll"><table class="num">
+  <tr><th>Tim</th><th>Masuk</th><th>Selesai</th><th>Dikerjakan</th><th>Belum ditanggapi</th><th>Rata-rata respons 1</th><th>Colekan</th></tr>
+  {% for d, x in resp.items() %}<tr><td><b>{{ d }}</b></td><td>{{ x.n }}</td><td>{{ x.done }}</td><td>{{ x.prog }}</td><td>{% if x.nofb %}<b style="color:var(--bad)">{{ x.nofb }}</b>{% else %}0{% endif %}</td><td>{{ x.first|hrs if x.first is not none else '–' }}</td><td>{{ x.nudges }}</td></tr>{% endfor %}
+ </table></div></div>
+</div>
+<div class="col">
+ <div class="card"><h2>Belum ditanggapi <small>diam terlama di atas</small></h2>
+  {% if nf %}<div class="scroll"><table><tr><th>Nomor</th><th>Ke</th><th>Dari</th><th>Diam</th><th></th></tr>
+  {% for r in nf %}<tr><td class="mono"><a href="{{ url_for('hub.history', rid=r.id) }}">{{ r.enquiry.enq_no }}</a></td><td>{{ r.dept }}</td><td>{{ r.seller_code }}</td><td><span class="pill {{ 'bad' if st[r.id].rm else 'warn' }}">{{ st[r.id].h|hrs }}</span></td>
+   <td>{% if current_user.role in ('sales','rm') %}<form class="inline" method="post" action="{{ url_for('hub.nudge', rid=r.id) }}">{{ csrf() }}<input type="hidden" name="next" value="{{ request.full_path }}"><button class="b g s">Colek</button></form>{% endif %}</td></tr>{% endfor %}
+  </table></div><p class="note">Lebih dari 4 jam kerja: pengingat ke tim. Lebih dari 1 hari kerja: ditandai ke RM.</p>
+  {% else %}<p class="note">Semua request sudah ditanggapi.</p>{% endif %}
+ </div>
+ <div class="card"><h2>Enquiry per hari <small>bulan ini · {{ mtd_count }} total</small></h2>
+  <div class="days">{% for d, c in month_days %}<div class="{{ 'today' if d == today_day }}" title="{{ d }}: {{ c }}">{{ c or '' }}<i style="height:{{ c / day_max * 80 }}%"></i></div>{% endfor %}</div>
+  <div class="dlab">{% for d, c in month_days %}<span>{{ d }}</span>{% endfor %}</div>
+ </div>
+ <div class="card"><h2>Beban enquiry per sales</h2><div class="scroll"><table class="num">
+  <tr><th>Sales</th><th>Hari ini</th><th>Bulan ini</th><th>Terbuka</th><th>Tier A terbuka</th><th>Beban</th></tr>
+  {% for p in sellers %}{% set x = per[p.code] %}
+  <tr><td><b>{{ p.name }}</b> {{ p.code }}</td><td>{{ x.today }}</td><td>{{ x.mtd }}</td><td>{{ x.open }}</td><td>{{ x.tier_a }}</td>
+   <td><span class="pill {{ 'bad' if x.open > 5 else 'warn' if x.open > 2 else 'ok' }}">{{ 'Tinggi' if x.open > 5 else 'Sedang' if x.open > 2 else 'Aman' }}</span></td></tr>{% endfor %}
+ </table></div></div>
+</div>
+</div>
+{% endblock %}

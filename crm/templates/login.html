@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Masuk · Tradecorp CRM{% endblock %}
+{% block bare %}
+<div style="min-height:100vh;display:grid;place-items:center;padding:16px;background:var(--rail)">
+ <form method="post" class="card" style="width:min(100%,360px);display:flex;flex-direction:column;gap:10px">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <h1>Tradecorp CRM</h1>
+  <p class="note" style="margin:0">Masuk dengan akun yang diberikan admin.</p>
+  {% with msgs = get_flashed_messages(with_categories=true) %}{% for cat, m in msgs %}<div class="flash {{ cat }}">{{ m }}</div>{% endfor %}{% endwith %}
+  <div class="fr"><label for="u">Username</label><input id="u" name="username" autocomplete="username" autofocus required></div>
+  <div class="fr"><label for="p">Password</label><input id="p" name="password" type="password" autocomplete="current-password" required></div>
+  <button class="b">Masuk</button>
+ </form>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}{% from "_m.html" import csrf, msg_list %}
+{% block title %}Chat tim · Tradecorp CRM{% endblock %}
+{% block main %}
+<div class="chat">
+ <aside class="card chans">
+  {% set groups = [('region','Region'), ('team','Tim'), ('enq','Thread enquiry'), ('dm','Pesan langsung')] %}
+  {% for kind, label in groups %}{% set items = chans|selectattr('kind', 'equalto', kind)|list %}{% if items %}
+   <h4>{{ label }}</h4>
+   {% for x in items %}<a href="{{ url_for('chat.room', cid=x.id) }}" class="{{ 'on' if c and x.id == c.id }}"><span class="{{ 'mono' if kind == 'enq' }}">{{ dm_name(x, current_user) }}</span>{% if unread.get(x.id) and not (c and x.id == c.id) %}<span class="badge">{{ unread[x.id] }}</span>{% endif %}</a>{% endfor %}
+  {% endif %}{% endfor %}
+  <h4>Mulai pesan langsung</h4>
+  <form method="post" action="{{ url_for('chat.dm') }}" class="row" style="padding:0 8px">{{ csrf() }}
+   <select name="user" aria-label="Orang" style="flex:1;min-width:0">{% for p in people %}<option value="{{ p.id }}">{{ p.name }}{% if p.code %} · {{ p.code }}{% endif %}</option>{% endfor %}</select><button class="b s">Buka</button></form>
+ </aside>
+ {% if c %}
+ <section class="card room" data-poll="{{ url_for('chat.poll', cid=c.id) }}" data-last="{{ msgs[-1].id if msgs else 0 }}">
+  <h2>{{ dm_name(c, current_user) }} {% if enq %}<small><a href="{{ url_for('enquiries.detail', eid=enq.id) }}">buka enquiry {{ enq.customer.company }}</a></small>{% endif %}</h2>
+  <div class="msgs">{{ msg_list(msgs) }}{% if not msgs %}<p class="note">Belum ada pesan. Ketik @kode atau @username untuk menyebut orang.</p>{% endif %}</div>
+  {% if can_post %}
+  <form class="composer" method="post" action="{{ url_for('chat.send', cid=c.id) }}" enctype="multipart/form-data">{{ csrf() }}
+   <textarea name="text" rows="1" placeholder="Tulis pesan… (Enter kirim, Shift+Enter baris baru)" aria-label="Pesan"></textarea>
+   <input type="file" name="file" aria-label="Lampiran" style="max-width:200px">
+   <button class="b">Kirim</button>
+  </form>
+  {% else %}<p class="note">Manajemen hanya membaca channel ini.</p>{% endif %}
+ </section>
+ {% else %}<div class="card empty">Belum ada channel.</div>{% endif %}
+</div>
+{% endblock %}
