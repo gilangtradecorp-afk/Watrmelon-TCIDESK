@@ -1,0 +1,433 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Tradecorp CRM Model</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Layout: a depot gate board. Dark steel rail of views on the left, working yard on the right; index numbers set like container codes. */
+:root{--bg:#f2f4f6;--panel:#ffffff;--ink:#15202b;--mute:#5a6775;--line:#dbe1e7;--rail:#0e2a44;--rail-ink:#c7d5e2;--rail-on:#1d4b75;--brand:#0f4c81;--brand-ink:#ffffff;--soft:#e6eef6;--ok:#17734a;--ok-bg:#e3f3ea;--warn:#8a5a00;--warn-bg:#fdf1d4;--bad:#b42d20;--bad-bg:#fbe6e3;--bar:#e3e8ed;--amber:#d99a2b;
+--f-display:"Space Grotesk","Inter",system-ui,sans-serif;--f-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;--f-mono:ui-monospace,"SF Mono",Consolas,"Liberation Mono",monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f151b;--panel:#172029;--ink:#e6ecf2;--mute:#97a5b3;--line:#2a3642;--rail:#0a1622;--rail-ink:#a9bccd;--rail-on:#1b456b;--brand:#5aa2e0;--brand-ink:#08131d;--soft:#1c2c3b;--ok:#5fd39b;--ok-bg:#143326;--warn:#f0c264;--warn-bg:#3a2e12;--bad:#ff8f82;--bad-bg:#40201c;--bar:#26323e;--amber:#e0a93b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f151b;--panel:#172029;--ink:#e6ecf2;--mute:#97a5b3;--line:#2a3642;--rail:#0a1622;--rail-ink:#a9bccd;--rail-on:#1b456b;--brand:#5aa2e0;--brand-ink:#08131d;--soft:#1c2c3b;--ok:#5fd39b;--ok-bg:#143326;--warn:#f0c264;--warn-bg:#3a2e12;--bad:#ff8f82;--bad-bg:#40201c;--bar:#26323e;--amber:#e0a93b;color-scheme:dark}
+*{box-sizing:border-box}
+a{color:var(--brand)}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.45}
+#app{display:grid;grid-template-columns:200px minmax(0,1fr);min-height:100vh}
+#rail{background:var(--rail);color:var(--rail-ink);padding:16px 10px;display:flex;flex-direction:column;gap:4px}
+.logo{font-family:var(--f-display);font-weight:700;color:#fff;font-size:16px;letter-spacing:.4px;padding:0 8px 10px}
+.logo small{display:block;font-family:var(--f-body);font-weight:400;font-size:11px;color:var(--rail-ink);letter-spacing:0}
+#nav{display:flex;flex-direction:column;gap:2px}
+#nav button{all:unset;cursor:pointer;padding:8px 10px;border-radius:6px;font-size:13.5px;color:var(--rail-ink)}
+#nav button.on{background:var(--rail-on);color:#fff;font-weight:600}
+#nav button:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,[data-a]:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.who{margin-top:auto;display:flex;flex-direction:column;gap:6px;padding:10px 6px 0;border-top:1px solid #23415f;font-size:12px}
+.who label{color:var(--rail-ink);font-size:11px;text-transform:uppercase;letter-spacing:.6px}
+.who select{width:100%}
+#main{padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));min-width:0;display:flex;flex-direction:column;gap:12px}
+.top{display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:space-between;align-items:flex-end}
+h1{font-family:var(--f-display);font-size:22px;margin:0;text-wrap:balance;line-height:1.2}
+h2{font-family:var(--f-display);font-size:15px;margin:0 0 8px;display:flex;flex-wrap:wrap;gap:6px;justify-content:space-between;align-items:baseline}
+h2 small,.sub,.note{font-family:var(--f-body);font-weight:400;font-size:12px;color:var(--mute)}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px;align-items:start}
+.col{display:flex;flex-direction:column;gap:12px;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;min-width:0}
+.kpi{flex:1 1 130px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.kpi .l{font-size:12px;color:var(--mute)}.kpi .v{font-family:var(--f-display);font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}.kpi .d{font-size:11.5px;color:var(--mute)}
+.kpi.bad{background:var(--bad-bg);border-color:var(--bad)}.kpi.bad .v{color:var(--bad)}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th{text-align:left;font-size:11px;color:var(--mute);font-weight:600;padding:6px;border-bottom:1px solid var(--line);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:13px}
+tr.click{cursor:pointer}tr.click:hover td{background:var(--soft)}
+.num td:not(:first-child),.num th:not(:first-child){text-align:center}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.2px;white-space:nowrap}
+.pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11.5px;font-weight:600;background:var(--soft);color:var(--brand);white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}.pill.warn{background:var(--warn-bg);color:var(--warn)}.pill.bad{background:var(--bad-bg);color:var(--bad)}.pill.mute{background:var(--bar);color:var(--mute)}
+.t{display:inline-block;min-width:22px;text-align:center;border-radius:4px;font-weight:700;font-size:12px;padding:1px 4px;color:#fff}
+.tA{background:#17734a}.tB{background:#b7791f}.tC{background:#7c8894}.tP{background:#7c8894}
+button.b,a.b{all:unset;cursor:pointer;background:var(--brand);color:var(--brand-ink);padding:6px 11px;border-radius:6px;font-weight:600;font-size:12.5px;white-space:nowrap}
+button.b.g{background:transparent;color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}
+button.b.s{padding:3px 8px;font-size:11.5px}
+button.b.d{background:var(--bad);color:#fff}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 8px;max-width:100%}
+.alert{background:var(--bad-bg);border:1px solid var(--bad);color:var(--bad);border-radius:8px;padding:8px 12px;font-size:13px}
+.info{background:var(--warn-bg);border:1px solid var(--amber);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.hb{display:grid;grid-template-columns:96px minmax(0,1fr) 32px;align-items:center;gap:8px;margin:7px 0;font-size:12.5px}
+.trk{display:flex;height:14px;background:var(--bar);border-radius:3px;overflow:hidden}.trk i{display:block;height:100%}
+.sD{background:var(--brand)}.sO{background:var(--amber)}.sL{background:var(--bad)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin:0 3px 0 8px}
+.hb b{text-align:right}
+.days{display:flex;align-items:flex-end;gap:5px;height:110px;border-bottom:1px solid var(--line)}
+.days div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:11px;color:var(--mute);min-width:0}
+.days i{display:block;width:100%;background:var(--brand);border-radius:3px 3px 0 0;min-height:1px}
+.days div.today i{background:var(--amber)}
+.dlab{display:flex;gap:5px;font-size:11px;color:var(--mute);padding-top:3px}.dlab span{flex:1;text-align:center}
+.kan{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(190px,1fr);gap:8px;overflow-x:auto;padding-bottom:6px}
+.lane{background:var(--bar);border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.lane h3{margin:0;font-size:13px;display:flex;justify-content:space-between;font-family:var(--f-display)}.lane h3 span{font-weight:400;color:var(--mute)}
+.tk{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:6px;padding:7px 8px;font-size:12.5px;display:flex;flex-direction:column;gap:4px}
+.tk.bad{border-left-color:var(--bad)}.tk.ok{border-left-color:var(--ok)}.tk.warn{border-left-color:var(--amber)}
+.tk .f{display:flex;flex-wrap:wrap;gap:4px;justify-content:space-between;color:var(--mute);font-size:11.5px}
+.tk .acts{display:flex;flex-wrap:wrap;gap:4px}
+.kv{display:grid;grid-template-columns:110px minmax(0,1fr);gap:5px 10px;font-size:13px}.kv span{color:var(--mute)}
+.chk{list-style:none;margin:0;padding:0}.chk li{padding:6px 0;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center;font-size:13px}.chk li:last-child{border:0}
+.chk b.p{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--mute)}
+.tl{list-style:none;margin:0;padding:0}.tl li{padding:6px 0 6px 14px;border-left:2px solid var(--line);position:relative;font-size:12.5px}
+.tl li:before{content:"";position:absolute;left:-5px;top:11px;width:8px;height:8px;border-radius:50%;background:var(--brand)}
+.tl em{font-style:normal;color:var(--mute);margin-right:6px;white-space:nowrap}
+.nf{display:inline-block;background:var(--bad-bg);color:var(--bad);border-radius:8px;padding:0 6px;font-weight:700;font-size:11px;margin-left:4px}
+.empty{text-align:center;padding:40px 16px;color:var(--mute)}.empty h1{color:var(--ink);margin-bottom:6px}
+#modal{position:fixed;inset:0;background:rgba(8,16,24,.55);display:flex;align-items:flex-start;justify-content:center;padding:max(24px,env(safe-area-inset-top,0px)) 16px 24px;overflow:auto;z-index:20}
+#mBox{background:var(--panel);border-radius:10px;border:1px solid var(--line);width:min(100%,520px);padding:16px;display:flex;flex-direction:column;gap:10px}
+.fr{display:flex;flex-direction:column;gap:3px;margin-bottom:8px}.fr label{font-size:12px;color:var(--mute)}.fr.ck{flex-direction:row;align-items:center;gap:8px}.fr.ck label{font-size:13px;color:var(--ink)}
+.fr input:not([type=checkbox]),.fr select,.fr textarea{width:100%}
+.err{color:var(--bad);font-size:13px;margin:0}
+#toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:90vw}
+@media (max-width:820px){#app{grid-template-columns:minmax(0,1fr)}#rail{padding:10px max(12px,env(safe-area-inset-right,0px)) 10px max(12px,env(safe-area-inset-left,0px));gap:8px}.logo{padding:0}#nav{flex-direction:row;overflow-x:auto;gap:4px}#nav button{white-space:nowrap}.who{margin:0;border:0;padding:0;flex-direction:row;flex-wrap:wrap;align-items:center}.who select{width:auto}.who label{display:none}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+
+<div id="app">
+ <aside id="rail">
+  <div class="logo">TRADECORP CRM<small>Working model &middot; dummy data</small></div>
+  <nav id="nav" aria-label="Views"></nav>
+  <div class="who">
+   <label for="selRole">View as</label>
+   <select id="selRole" data-c="role"></select>
+   <select id="selWho" data-c="who" aria-label="Person or team"></select>
+   <span id="clock"></span>
+  </div>
+ </aside>
+ <main id="main"><div class="empty"><h1>Opening the yard</h1><p>Loading shared data&hellip;</p></div></main>
+</div>
+<div id="modal" hidden><div id="mBox" role="dialog" aria-modal="true" aria-labelledby="mT">
+ <h2 id="mT"></h2><div id="mB"></div>
+ <div class="row" style="justify-content:flex-end"><button class="b g" data-a="mX" id="mCancel">Cancel</button><button class="b" data-a="mOk" id="mOkBtn">Save</button></div>
+</div></div>
+<div id="toast" hidden role="status"></div>
+
+<script>
+(()=>{'use strict';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const H=36e5,D=864e5,TZ=7*H;
+
+/* ---------- configuration (organisation, rules) ---------- */
+const PEOPLE=[['GIL','Gilang','SBY','rm'],['ADI','Adi','SBY','sales'],['AND','Andri','SBY','sales'],['HEN','Pak Hendy','BPN','rm'],['NOV','Novi','BPN','sales'],['REV','Revita','BPN','sales'],['YUL','Yulianti','BPN','sales'],['DIN','Dini','JKT','rm'],['END','Enda','JKT','sales'],['EVI','Evi','JKT','sales'],['IVA','Ivan','JKT','sales'],['YOP','Yopi','JKT','sales'],['WEL','Welly','JKT','sales']].map(([code,name,region,role])=>({code,name,region,role}));
+const P=Object.fromEntries(PEOPLE.map(p=>[p.code,p]));
+const REGIONS={SBY:'Surabaya, Bali, NTB, Papua',BPN:'Balikpapan',JKT:'Jakarta'};
+const DEPTS={Drafter:{days:3,cap:10},Estimator:{days:2,cap:8},Purchasing:{days:3},Trucking:{days:2},Depo:{days:1},Branch:{days:2},'Sales Support':{days:2}};
+const DN=Object.keys(DEPTS);
+const KYC=[['identity','Identity verified (person + company)',20],['repeat','Repeat customer',15],['need','Clear need, knows what they buy',15],['layout','Layout or drawing provided',15],['qty','Quantity known',10],['timeline','Timeline known',10],['location','Location known',5],['budget','Budget or decision maker known',10]];
+const STATUS=['New','Contacted','Ongoing','No response','Won','Lost','Not prospectable'];
+const OPEN=['New','Contacted','Ongoing','No response'];
+const LOSS=['Price','Lead time','Specification','Competitor','Budget cancelled','No response'];
+const SOURCES=['Central','Direct email','WhatsApp'];
+const WON=['PO received','WO approval','WO / Kickoff','Production','Delivered','BAST signed','Handed to Finance'];
+const PO=[['drawing','Customer-approved drawing (signed, email or verbal with who and when)'],['quote','Final quotation with revision number'],['match','PO matches the quote: items, qty, price'],['terms','PO terms clear: late penalty, warranty, delivery'],['timeline','Production timeline and delivery date'],['payment','Payment terms: DP, progress, on BAST']];
+const SLA={contact:4,reassign:8,update:27,follow:9,lost:7,nofb:4,rmflag:9,dup:60};
+
+/* ---------- state ---------- */
+const S={db:null,nodb:false,got:{},enq:new Map(),req:new Map(),cat:new Map(),cfg:{},role:'sales',who:'ADI',tab:'desk',sel:null,selReq:null,live:false,filter:'',fStatus:'open',regionF:'',q:{enqId:'',tpl:'Sale',lines:[]},form:null};
+try{const o=JSON.parse(localStorage.getItem('crm.view')||'null');if(o){S.role=o.role||S.role;S.who=o.who||S.who}}catch(e){}
+const keep=()=>{try{localStorage.setItem('crm.view',JSON.stringify({role:S.role,who:S.who}))}catch(e){}};
+
+/* ---------- time ---------- */
+const now=()=>(!S.live&&S.cfg.demoNow)?+new Date(S.cfg.demoNow):Date.now();
+const iso=t=>new Date(t).toISOString();
+const w=t=>new Date(+new Date(t)+TZ);
+const MON='Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
+const p2=n=>String(n).padStart(2,'0');
+const fD=t=>{const d=w(t);return d.getUTCDate()+' '+MON[d.getUTCMonth()]};
+const fT=t=>{const d=w(t);return fD(t)+' '+p2(d.getUTCHours())+':'+p2(d.getUTCMinutes())};
+const dayKey=t=>w(t).toISOString().slice(0,10);
+const mtd=t=>dayKey(t).slice(0,7)===dayKey(now()).slice(0,7)&&+new Date(t)<=now();
+const today=t=>dayKey(t)===dayKey(now());
+/* business hours between two moments: Mon-Fri 08:00-17:00 WIB */
+function biz(a,b){a=+new Date(a)+TZ;b=+new Date(b)+TZ;if(!(b>a))return 0;let t=0;for(let d=Math.floor(a/D)*D;d<b;d+=D){const wd=new Date(d).getUTCDay();if(wd===0||wd===6)continue;const s=Math.max(a,d+8*H),e=Math.min(b,d+17*H);if(e>s)t+=e-s}return t/H}
+function addBizDays(t,n){let d=+new Date(t);while(n>0){d+=D;const wd=w(d).getUTCDay();if(wd!==0&&wd!==6)n--}return d}
+const hrs=h=>h<1?Math.max(1,Math.round(h*60))+' m':h<9?h.toFixed(1)+' h':(h/9).toFixed(1)+' d';
+const rp=n=>'Rp '+Math.round(n||0).toLocaleString('en-US');
+const rpS=n=>!n?'Rp 0':n>=1e9?'Rp '+(n/1e9).toFixed(1)+' bn':'Rp '+Math.round(n/1e6)+' m';
+const avg=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:null;
+const pct=(a,b)=>b?Math.round(a/b*100)+'%':'–';
+
+/* ---------- rules ---------- */
+const score=e=>Math.max(0,Math.min(100,KYC.reduce((s,[k,,p])=>s+(e.kyc&&e.kyc[k]?p:0),0)-10*(e.redFlags||0)));
+const tier=e=>{if(e.priceCheck)return'P';const s=score(e);return s>=70?'A':s>=40?'B':'C'};
+const tOrd={A:0,B:1,C:2,P:3};
+const isOpen=e=>OPEN.includes(e.status);
+function sla(e){const n=now();
+ if(e.status==='New'){const h=biz(e.received,n);return h>SLA.reassign?{k:'reassign',t:'No contact for '+hrs(h),bad:1}:h>SLA.contact?{k:'breach',t:'No contact for '+hrs(h),bad:1}:{k:'ok',t:'Contact within '+hrs(SLA.contact-h)}}
+ if(e.status==='No response'){const d=(n-+new Date(e.lastUpdate))/D;return d>=SLA.lost?{k:'autolost',t:'Silent '+Math.floor(d)+' days',bad:1}:{k:'ok',t:'Auto-lost in '+Math.ceil(SLA.lost-d)+' d'}}
+ if(isOpen(e)){const h=biz(e.lastUpdate,n);if(e.stage==='Quote sent')return h>SLA.follow?{k:'followup',t:'Daily follow-up due',bad:1}:{k:'ok',t:'Follow-up logged'};return h>SLA.update?{k:'overdue',t:'Status update '+hrs(h-SLA.update)+' late',bad:1}:{k:'ok',t:'Update due in '+hrs(SLA.update-h)}}
+ return{k:'closed',t:''}}
+function rst(r){const n=now();
+ if(r.status==='pending')return{b:'open',t:'Urgent: waiting for RM',cls:'warn'};
+ if(r.status==='sent'){const h=biz(r.sentAt,n);return h>SLA.nofb?{b:'open',nofb:1,rm:h>SLA.rmflag,h,t:'No feedback for '+hrs(h),cls:'bad'}:{b:'open',h,t:'Awaiting accept',cls:'warn'}}
+ if(r.status==='accepted')return n>+new Date(r.due)?{b:'late',t:'Late, was due '+fD(r.due),cls:'bad'}:{b:'open',t:'In progress, due '+fD(r.due),cls:'ok'};
+ return{b:'done',t:r.status==='returned'?'Handed back':r.status==='rejected'?'Rejected':'Redirected to catalog',cls:''}}
+const digits=s=>String(s||'').replace(/\D/g,'').replace(/^62/,'0');
+const sameCust=(a,b)=>{const ea=(a.email||'').toLowerCase(),eb=(b.email||'').toLowerCase();if(ea&&ea===eb)return true;const pa=digits(a.phone),pb=digits(b.phone);if(pa.length>6&&pa===pb)return true;const ca=(a.customer||'').trim().toLowerCase(),cb=(b.customer||'').trim().toLowerCase();return!!ca&&ca===cb};
+function mint(region,seller,t){const k=dayKey(t),yy=k.slice(2,4);let n=0;for(const e of S.enq.values()){const m=/^ENQ-([A-Z]+)-[A-Z]+-(\d{2})\d{4}-(\d+)$/.exec(e.enqNo||'');if(m&&m[1]===region&&m[2]===yy)n=Math.max(n,+m[3])}return`ENQ-${region}-${seller}-${k.slice(2).replace(/-/g,'')}-${String(n+1).padStart(4,'0')}`}
+
+/* ---------- who is looking ---------- */
+const me=()=>P[S.who];
+const actor=()=>S.role==='support'?S.who:(me()?me().name:'Management');
+const canW=()=>S.role!=='mgmt';
+const inScope=x=>S.role==='sales'?x.seller===S.who:S.role==='rm'?x.region===me().region:S.role==='mgmt'?(!S.regionF||x.region===S.regionF):true;
+const visE=()=>[...S.enq.values()].filter(inScope);
+const visR=()=>[...S.req.values()].filter(r=>S.role==='support'?r.dept===S.who:inScope(r));
+const sellersInScope=()=>PEOPLE.filter(p=>S.role==='sales'?p.code===S.who:S.role==='rm'?p.region===me().region:(!S.regionF||p.region===S.regionF));
+const TABS={sales:[['desk','My Desk'],['enq','Enquiries'],['hub','My requests'],['work','My workload'],['quote','Quotations']],rm:[['region','Region control'],['work','Workload'],['inter','Interactions'],['enq','Enquiries'],['hub','Hand-off Hub'],['quote','Quotations']],mgmt:[['mgmt','All regions'],['work','Workload'],['inter','Interactions'],['enq','Enquiries'],['hub','Hand-off Hub']],support:[['hub','My queue']]};
+
+/* ---------- storage ---------- */
+const MAP={enquiries:()=>S.enq,requests:()=>S.req,catalog:()=>S.cat};
+let raf=0;const draw=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(render)};
+function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,3500)}
+function put(col,doc){MAP[col]().set(doc.id,doc);draw();if(S.db)return S.db.doc(col+'/'+doc.id).set(doc).catch(e=>{toast('Not saved ('+((e&&e.code)||'error')+'). It shows on this screen only.')});return Promise.resolve()}
+const nid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+function upE(id,fn,text,touch=true){const e=structuredClone(S.enq.get(id));if(fn)fn(e);const n=iso(now());if(touch)e.lastUpdate=n;if(text)(e.log=e.log||[]).unshift({t:n,who:actor(),text});e.score=score(e);e.tier=tier(e);return put('enquiries',e)}
+function upR(id,fn,text){const r=structuredClone(S.req.get(id));if(fn)fn(r);if(text)(r.log=r.log||[]).unshift({t:iso(now()),who:actor(),text});return put('requests',r)}
+
+/* ---------- small renderers ---------- */
+const tChip=e=>{const t=tier(e);return`<span class="t t${t}" title="KYC score ${score(e)}">${t==='P'?'PC':t}</span>`};
+const stPill=e=>`<span class="pill ${e.status==='Won'?'ok':e.status==='Lost'||e.status==='Not prospectable'?'mute':''}">${esc(e.status==='Won'||isOpen(e)?(e.stage||e.status):e.status)}</span>`;
+const slaPill=e=>{const s=sla(e);return s.t?`<span class="pill ${s.bad?'bad':'ok'}">${esc(s.t)}</span>`:''};
+const kpi=(l,v,d,bad)=>`<div class="kpi${bad?' bad':''}"><div class="l">${l}</div><div class="v">${v}</div><div class="d">${d||'&nbsp;'}</div></div>`;
+const log=(a,n=8)=>`<ul class="tl">${(a||[]).slice(0,n).map(x=>`<li><em>${fT(x.t)}</em><b>${esc(x.who)}:</b> ${esc(x.text)}</li>`).join('')||'<li>No activity yet</li>'}</ul>`;
+const regionSel=()=>S.role==='mgmt'?`<select data-c="regionF" id="regionF" aria-label="Region"><option value="">All regions</option>${Object.keys(REGIONS).map(r=>`<option${S.regionF===r?' selected':''}>${r}</option>`).join('')}</select>`:'';
+const scopeName=()=>S.role==='sales'?me().name:S.role==='rm'?me().region+' region':S.regionF?S.regionF+' region':'All regions';
+const enqRow=e=>`<tr class="click" data-a="open" data-id="${e.id}" tabindex="0"><td>${tChip(e)}</td><td class="mono">${esc(e.enqNo)}</td><td>${esc(e.customer)}</td><td>${esc(e.product)}</td><td>${stPill(e)}</td><td>${slaPill(e)}</td><td>${esc(e.seller)}</td></tr>`;
+const enqTable=(a,empty)=>a.length?`<div class="scroll"><table><tr><th>Tier</th><th>Index no.</th><th>Customer</th><th>Product</th><th>Stage</th><th>SLA</th><th>Owner</th></tr>${a.map(enqRow).join('')}</table></div>`:`<p class="note">${empty}</p>`;
+const sortE=a=>a.sort((x,y)=>(sla(y).bad?1:0)-(sla(x).bad?1:0)||tOrd[tier(x)]-tOrd[tier(y)]||+new Date(y.received)-+new Date(x.received));
+
+/* ---------- views ---------- */
+function vDesk(){const E=visE(),R=visR(),op=E.filter(isOpen);
+ const br=op.filter(e=>['breach','reassign'].includes(sla(e).k)),od=op.filter(e=>sla(e).k==='overdue'),fu=op.filter(e=>sla(e).k==='followup');
+ const fc=avg(E.filter(e=>e.contactedAt).map(e=>biz(e.received,e.contactedAt)));
+ const won=E.filter(e=>e.status==='Won').length,lost=E.filter(e=>e.status==='Lost').length;
+ const tc={A:0,B:0,C:0,P:0};op.forEach(e=>tc[tier(e)]++);
+ return`<div class="top"><div><h1>${esc(me().name)}'s desk</h1><div class="sub">${fT(now())} WIB &middot; ${op.filter(e=>sla(e).bad).length} items need action</div></div><div class="row">${canW()?'<button class="b" data-a="newEnq">+ Log enquiry</button>':''}</div></div>
+ ${br.map(e=>`<div class="alert"><b>SLA breach:</b> <span class="mono">${esc(e.enqNo)}</span> (${esc(e.customer)}) &ndash; ${esc(sla(e).t)}. First contact is due within ${SLA.contact} business hours. <button class="b s d" data-a="open" data-id="${e.id}">Open</button></div>`).join('')}
+ <div class="row">${kpi('New enquiries today',E.filter(e=>today(e.received)).length,'Month to date '+E.filter(e=>mtd(e.received)).length)}${kpi('Open enquiries',op.length,`A ${tc.A} &middot; B ${tc.B} &middot; C ${tc.C+tc.P}`)}${kpi('Overdue status updates',od.length,'3-day rule',od.length)}${kpi('Quote follow-ups due',fu.length,'Daily comment')}${kpi('Avg first contact',fc==null?'–':hrs(fc),'Target '+SLA.contact+' h')}${kpi('Win rate',pct(won,won+lost),won+' won &middot; '+lost+' lost')}</div>
+ <div class="grid2"><div class="card" style="grid-column:span 2;min-width:0"><h2>Open enquiries <small>action needed first, then by tier</small></h2>${enqTable(sortE(op),'Nothing open. Log an enquiry to start.')}</div>
+ <div class="card"><h2>My requests to teams <small>month to date</small></h2>${deptBars(R.filter(r=>mtd(r.sentAt)))}</div></div>`}
+
+function deptBars(R){const rows=DN.map(d=>{const a=R.filter(r=>r.dept===d),c={done:0,open:0,late:0};a.forEach(r=>c[rst(r).b]++);return[d,a.length,c]});const mx=Math.max(1,...rows.map(r=>r[1]));
+ return`<div class="note"><span class="dot sD" style="margin-left:0"></span>Done<span class="dot sO"></span>Open<span class="dot sL"></span>Late</div>`+rows.map(([d,n,c])=>`<div class="hb"><span>${d}</span><div class="trk"><i class="sD" style="width:${c.done/mx*100}%"></i><i class="sO" style="width:${c.open/mx*100}%"></i><i class="sL" style="width:${c.late/mx*100}%"></i></div><b>${n}</b></div>`).join('')}
+
+function vEnq(){let E=visE();const f=S.filter.toLowerCase();
+ if(S.fStatus==='open')E=E.filter(isOpen);else if(S.fStatus!=='all')E=E.filter(e=>e.status===S.fStatus);
+ if(f)E=E.filter(e=>[e.enqNo,e.customer,e.product,e.contact,e.location].join(' ').toLowerCase().includes(f));
+ return`<div class="top"><div><h1>Enquiries</h1><div class="sub">${esc(scopeName())} &middot; ${E.length} shown</div></div><div class="row">${regionSel()}<select data-c="fStatus" id="fStatus" aria-label="Status">${[['open','Open'],['all','All'],...STATUS.map(s=>[s,s])].map(([v,l])=>`<option value="${v}"${S.fStatus===v?' selected':''}>${l}</option>`).join('')}</select><input id="fText" data-i="filter" placeholder="Search number, customer, product" value="${esc(S.filter)}" aria-label="Search">${canW()&&S.role!=='support'?'<button class="b" data-a="newEnq">+ Log enquiry</button>':''}</div></div>
+ <div class="card">${enqTable(sortE(E),'No enquiries match.')}</div>`}
+
+function vDetail(){const e=S.enq.get(S.sel);if(!e){S.sel=null;return vEnq()}
+ const sc=score(e),sl=sla(e),wr=canW()&&S.role!=='support'&&inScope(e),rel=[...S.enq.values()].filter(x=>x.id!==e.id&&sameCust(x,e)),rq=[...S.req.values()].filter(r=>r.enqId===e.id);
+ return`<div class="top"><div><button class="b g s" data-a="back">&larr; Back</button><h1 class="mono" style="font-size:18px;margin-top:6px">${esc(e.enqNo)}</h1><div class="sub">${esc(e.customer)} &middot; ${esc(e.product)} &middot; Source: ${esc(e.source)} &middot; Received ${fT(e.received)} &middot; Owner ${esc(e.seller)}${e.firstOwner&&e.firstOwner!==e.seller?' (first owner '+esc(e.firstOwner)+')':''}</div></div>
+ <div class="row" style="align-items:center">${tChip(e)}<span class="pill">Score ${sc}</span>${stPill(e)}${slaPill(e)}</div></div>
+ ${wr?`<div class="row">${e.status==='New'?`<button class="b" data-a="contacted" data-id="${e.id}">Mark contacted</button>`:''}<button class="b${e.status==='New'?' g':''}" data-a="status" data-id="${e.id}">Update status</button><button class="b g" data-a="comment" data-id="${e.id}">Log follow-up</button>${isOpen(e)?`<button class="b g" data-a="sendReq" data-id="${e.id}">Send request to a team</button><button class="b g" data-a="toQuote" data-id="${e.id}">Build quotation</button>`:''}${e.status==='Lost'||e.status==='Not prospectable'?`<button class="b g" data-a="reopen" data-id="${e.id}">Reopen (customer came back)</button>`:''}</div>`:''}
+ <div class="grid2">
+ <div class="col"><div class="card"><h2>Customer</h2><div class="kv"><span>Contact</span><b>${esc(e.contact||'–')}</b><span>Company</span><b>${esc(e.customer||'–')}</b><span>Phone / email</span><b>${esc(e.phone||'–')} &middot; ${esc(e.email||'–')}</b><span>Business line</span><b>${esc(e.line||'–')} &middot; ${esc(e.type||'–')}</b><span>Product</span><b>${esc(e.product||'–')}</b><span>Location</span><b>${esc(e.location||'–')}</b><span>Quantity</span><b>${esc(e.qty||'–')}</b><span>Needed by</span><b>${esc(e.dateNeeded||'–')}</b><span>Pricing by</span><b>${esc(e.pricingDeadline||'–')}</b></div></div>
+ <div class="card"><h2>KYC score <small>${sc} of 100 &middot; intake ${e.intakeScore??sc}</small></h2><ul class="chk">${KYC.map(([k,l,p])=>`<li><input type="checkbox" id="k_${k}" data-c="kyc" data-id="${e.id}" data-k="${k}"${e.kyc&&e.kyc[k]?' checked':''}${wr?'':' disabled'}><label for="k_${k}">${l}</label><b class="p">${p}</b></li>`).join('')}
+ <li><input type="checkbox" id="k_pc" data-c="pc" data-id="${e.id}"${e.priceCheck?' checked':''}${wr?'':' disabled'}><label for="k_pc">Price-check only (catalog price range, no drafter or estimator)</label></li>
+ <li><span>Red flags: <b>${e.redFlags||0}</b> (minus 10 each)</span>${wr?`<span style="margin-left:auto" class="row"><button class="b g s" data-a="flag" data-id="${e.id}" data-n="-1" aria-label="Remove a red flag">&minus;</button><button class="b g s" data-a="flag" data-id="${e.id}" data-n="1" aria-label="Add a red flag">+</button></span>`:''}</li></ul>
+ <p class="note">Tier A is 70 or more, B is 40 to 69, C is under 40. Identity is required before any drafter or estimator request.</p></div>
+ ${e.status==='Won'?`<div class="card"><h2>PO handover checklist <small>${esc(e.stage||'')}</small></h2><ul class="chk">${PO.map(([k,l])=>`<li><input type="checkbox" id="po_${k}" data-c="po" data-id="${e.id}" data-k="${k}"${e.po&&e.po[k]?' checked':''}${wr&&e.stage==='PO received'?'':' disabled'}><label for="po_${k}">${l}</label></li>`).join('')}</ul>
+ ${wr&&e.stage==='PO received'?`<button class="b" data-a="poSend" data-id="${e.id}">Send package to RM for approval</button>`:''}${wr&&WON.indexOf(e.stage)>=2&&WON.indexOf(e.stage)<WON.length-1?`<button class="b" data-a="nextStage" data-id="${e.id}">Move to: ${WON[WON.indexOf(e.stage)+1]}</button>`:''}${e.stage==='WO approval'?'<p class="note">Waiting for the RM to approve the package.</p>':''}</div>`:''}
+ </div>
+ <div class="col"><div class="card"><h2>Activity log <small>newest first</small></h2>${log(e.log,12)}</div>
+ <div class="card"><h2>Requests to teams <small>${rq.length}</small></h2>${rq.length?`<div class="scroll"><table><tr><th>Team</th><th>Need</th><th>Status</th><th></th></tr>${rq.map(r=>{const s=rst(r);return`<tr><td>${esc(r.dept)}</td><td>${esc(r.title)}</td><td><span class="pill ${s.cls||'mute'}">${esc(s.t)}</span></td><td><button class="b g s" data-a="rLog" data-id="${r.id}">Log</button></td></tr>`}).join('')}</table></div>`:'<p class="note">No requests sent yet.</p>'}</div>
+ ${e.quote?`<div class="card"><h2>Quotation <small>${esc(e.quote.tpl)} &middot; rev.${e.quote.rev}</small></h2><div class="kv"><span>Total</span><b>${rp(e.quote.total)}</b><span>Lines</span><b>${e.quote.lines.map(l=>esc(l.qty+' × '+l.item)).join('; ')}</b></div></div>`:''}
+ <div class="card"><h2>Same customer <small>duplicate check, ${SLA.dup}-day window</small></h2>${rel.length?`<ul class="chk">${rel.map(x=>`<li><a href="#" data-a="open" data-id="${x.id}" class="mono">${esc(x.enqNo)}</a> ${stPill(x)} <span class="note">${esc(x.product)} &middot; owner ${esc(x.seller)}</span></li>`).join('')}</ul>`:'<p class="note">No other enquiry from this customer.</p>'}</div></div></div>`}
+
+function vRegion(){const E=visE(),R=visR(),op=E.filter(isOpen),m=E.filter(e=>mtd(e.received));
+ const br=op.filter(e=>sla(e).bad),re=op.filter(e=>sla(e).k==='reassign'),al=op.filter(e=>sla(e).k==='autolost');
+ const urg=R.filter(r=>r.status==='pending'),pos=E.filter(e=>e.stage==='WO approval'),sm={};SOURCES.forEach(s=>sm[s]=m.filter(e=>e.source===s).length);
+ const team=sellersInScope().map(p=>{const pe=E.filter(e=>e.seller===p.code),po=pe.filter(isOpen),fc=avg(pe.filter(e=>e.contactedAt).map(e=>biz(e.received,e.contactedAt))),b=po.filter(e=>sla(e).bad).length,wn=pe.filter(e=>e.status==='Won').length,ls=pe.filter(e=>e.status==='Lost').length;
+  return`<tr><td><b>${esc(p.name)}</b> ${p.code}${p.role==='rm'?' <span class="pill mute">RM</span>':''}</td><td>${po.length}</td><td>${fc==null?'–':hrs(fc)}</td><td>${b}</td><td>${pct(wn,wn+ls)}</td><td><span class="pill ${b>2?'bad':b?'warn':'ok'}">${b>2?'Action':b?'Watch':'OK'}</span></td></tr>`}).join('');
+ return`<div class="top"><div><h1>${me().region} region control</h1><div class="sub">${REGIONS[me().region]} &middot; ${fT(now())} WIB</div></div><button class="b" data-a="newEnq">+ Log enquiry</button></div>
+ <div class="row">${kpi('Enquiries MTD',m.length,SOURCES.map(s=>s+' '+sm[s]).join(' &middot; '))}${kpi('Tier A share',pct(m.filter(e=>tier(e)==='A').length,m.length),m.filter(e=>tier(e)==='A').length+' of '+m.length)}${kpi('Open SLA breaches',br.length,'contact, update or follow-up',br.length)}${kpi('Quotes out',op.filter(e=>e.stage==='Quote sent').length,rpS(op.filter(e=>e.stage==='Quote sent').reduce((s,e)=>s+(e.quote?e.quote.total:0),0)))}${kpi('POs won',E.filter(e=>e.status==='Won').length,rpS(E.filter(e=>e.status==='Won').reduce((s,e)=>s+(e.quote?e.quote.total:0),0)))}</div>
+ <div class="grid2"><div class="col">
+ <div class="card"><h2>Team discipline <small>business hours</small></h2><div class="scroll"><table class="num"><tr><th>Seller</th><th>Open</th><th>Avg 1st contact</th><th>Breaches</th><th>Win rate</th><th>Status</th></tr>${team}</table></div></div>
+ <div class="card"><h2>Needs reassignment <small>no contact after ${SLA.reassign} business hours</small></h2>${re.length?re.map(e=>`<div class="row" style="align-items:center;padding:6px 0;border-bottom:1px solid var(--line)"><span>${tChip(e)}</span><a href="#" data-a="open" data-id="${e.id}" class="mono">${esc(e.enqNo)}</a><span>${esc(e.customer)}</span><span class="pill bad">${esc(sla(e).t)}</span><span class="note">with ${esc(e.seller)}</span><select id="ra_${e.id}" aria-label="Reassign to">${sellersInScope().filter(p=>p.code!==e.seller).map(p=>`<option value="${p.code}">${esc(p.name)}</option>`).join('')}</select><button class="b s" data-a="reassign" data-id="${e.id}">Reassign</button></div>`).join(''):'<p class="note">Nothing waiting. Every new enquiry was contacted in time.</p>'}</div>
+ <div class="card"><h2>No response for ${SLA.lost} days <small>close as lost, reopen any time</small></h2>${al.length?al.map(e=>`<div class="row" style="align-items:center;padding:6px 0"><a href="#" data-a="open" data-id="${e.id}" class="mono">${esc(e.enqNo)}</a><span>${esc(e.customer)}</span><span class="pill bad">${esc(sla(e).t)}</span><button class="b s" data-a="closeLost" data-id="${e.id}">Close as lost</button></div>`).join(''):'<p class="note">None.</p>'}</div></div>
+ <div class="col"><div class="card"><h2>Approvals waiting <small>${urg.length+pos.length}</small></h2>
+ ${urg.map(r=>`<div style="padding:6px 0;border-bottom:1px solid var(--line)"><b>Urgent ${esc(r.dept.toLowerCase())} request</b> &middot; <span class="mono">${esc(r.enqNo)}</span><br><span class="note">${esc(r.title)} &middot; from ${esc(r.seller)}</span><div class="row" style="margin-top:4px"><button class="b s" data-a="apprReq" data-id="${r.id}">Approve</button><button class="b g s" data-a="rejReq" data-id="${r.id}">Reject</button></div></div>`).join('')}
+ ${pos.map(e=>`<div style="padding:6px 0;border-bottom:1px solid var(--line)"><b>PO handover package</b> &middot; <a href="#" data-a="open" data-id="${e.id}" class="mono">${esc(e.enqNo)}</a><br><span class="note">${esc(e.customer)} &middot; checklist ${PO.filter(([k])=>e.po&&e.po[k]).length}/${PO.length} &middot; from ${esc(e.seller)}</span><div class="row" style="margin-top:4px"><button class="b s" data-a="apprPO" data-id="${e.id}">Approve, open work order</button></div></div>`).join('')}
+ ${urg.length+pos.length?'':'<p class="note">Nothing to approve.</p>'}</div>
+ <div class="card"><h2>Open breaches <small>seller and RM alike</small></h2>${enqTable(sortE(br),'No breaches.')}</div></div></div>`}
+
+function vHub(){const R=visR(),act=R.filter(r=>rst(r).b!=='done');
+ const cap=d=>{const a=[...S.req.values()].filter(r=>r.dept===d&&r.status==='accepted'),c=DEPTS[d].cap,by={};a.forEach(r=>by[r.region]=(by[r.region]||0)+1);const ta=a.filter(r=>{const e=S.enq.get(r.enqId);return e&&tier(e)==='A'}).length;
+  return`<div class="card" style="flex:1 1 260px"><h2>${d} status today <small>${c} slots a day</small></h2><div class="trk" style="height:14px"><i class="${a.length>c?'sL':'sD'}" style="width:${Math.min(100,a.length/c*100)}%"></i></div><div class="note" style="margin-top:6px"><b>${a.length} of ${c} in use</b> &middot; ${Object.keys(REGIONS).map(r=>r+' '+(by[r]||0)).join(' &middot; ')} &middot; Tier A ${ta}</div></div>`};
+ const can=r=>canW()&&(S.role==='rm'||(S.role==='support'&&S.who===r.dept));
+ const card=r=>{const s=rst(r),e=S.enq.get(r.enqId);return`<div class="tk ${s.cls||''}"><span class="mono">${esc(r.enqNo)}</span><span>${esc(r.title)}</span><div class="f"><span>${e?tChip(e)+' '+score(e):''} &middot; ${esc(r.region)} &middot; ${esc(r.seller)}${r.urgent?' &middot; <b>URGENT</b>':''}</span><span>${esc(s.t)}</span></div><div class="acts">
+  ${can(r)&&r.status==='sent'?`<button class="b s" data-a="rAccept" data-id="${r.id}">Accept</button><button class="b g s" data-a="rReject" data-id="${r.id}">Reject</button>${r.dept==='Drafter'?`<button class="b g s" data-a="rRedirect" data-id="${r.id}">To catalog</button>`:''}`:''}
+  ${can(r)&&r.status==='accepted'?`<button class="b s" data-a="rReturn" data-id="${r.id}">Hand back</button>`:''}
+  ${S.role==='sales'&&r.status!=='pending'?`<button class="b g s" data-a="rNudge" data-id="${r.id}">Nudge</button>`:''}
+  <button class="b g s" data-a="rLog" data-id="${r.id}">Log</button></div></div>`};
+ return`<div class="top"><div><h1>${S.role==='support'?esc(S.who)+' queue':S.role==='sales'?'My requests to other teams':'Hand-off Hub'}</h1><div class="sub">One shared queue, ranked by KYC score and tagged by region. ${act.length} active.</div></div>${regionSel()}</div>
+ <div class="row">${cap('Drafter')}${cap('Estimator')}${kpi('Redirected to catalog',R.filter(r=>r.status==='redirected').length,'Drafter hours saved')}${kpi('Rejected',R.filter(r=>r.status==='rejected').length,'Unclear or incomplete package')}</div>
+ <div class="kan">${(S.role==='support'?[S.who]:DN).map(d=>{const a=act.filter(r=>r.dept===d).sort((x,y)=>{const ex=S.enq.get(x.enqId),ey=S.enq.get(y.enqId);return(ey?score(ey):0)-(ex?score(ex):0)});return`<div class="lane"><h3>${d} <span>${a.length}</span></h3>${a.map(card).join('')||'<span class="note">Nothing active</span>'}</div>`}).join('')}</div>`}
+
+function vWork(){const E=visE(),R=visR().filter(r=>mtd(r.sentAt)),sellers=sellersInScope(),n=now(),dk=dayKey(n),dd=+dk.slice(8);
+ const days=[];for(let i=1;i<=dd;i++){const k=dk.slice(0,8)+p2(i);days.push([i,E.filter(e=>dayKey(e.received)===k).length])}const mx=Math.max(1,...days.map(d=>d[1]));
+ const c={done:0,open:0,late:0};R.forEach(r=>c[rst(r).b]++);const m=E.filter(e=>mtd(e.received));
+ return`<div class="top"><div><h1>Workload &ndash; ${esc(scopeName())}</h1><div class="sub">Live &middot; month to date, ${MON[+dk.slice(5,7)-1]} 1&ndash;${dd}</div></div>${regionSel()}</div>
+ <div class="row">${kpi('Enquiries today',E.filter(e=>today(e.received)).length,sellers.slice(0,4).map(p=>p.code+' '+E.filter(e=>e.seller===p.code&&today(e.received)).length).join(' &middot; '))}${kpi('Enquiries MTD',m.length,'Tier A '+m.filter(e=>tier(e)==='A').length)}${kpi('Requests sent today',R.filter(r=>today(r.sentAt)).length,'to other teams')}${kpi('Requests MTD',R.length,c.done+' done &middot; '+c.open+' open')}${kpi('Requests late',c.late,'past the agreed date',c.late)}</div>
+ <div class="grid2"><div class="col"><div class="card"><h2>Sales requests by team <small>month to date</small></h2>${deptBars(R)}</div>
+ <div class="card"><h2>Requests per seller and team</h2><div class="scroll"><table class="num"><tr><th>Seller</th>${DN.map(d=>`<th>${d.replace('Sales Support','Support')}</th>`).join('')}<th>Total</th><th>Late</th></tr>${sellers.map(p=>{const a=R.filter(r=>r.seller===p.code);return`<tr><td><b>${esc(p.name)}</b> ${p.code}</td>${DN.map(d=>`<td>${a.filter(r=>r.dept===d).length||'·'}</td>`).join('')}<td><b>${a.length}</b></td><td>${a.filter(r=>rst(r).b==='late').length}</td></tr>`}).join('')}</table></div></div></div>
+ <div class="col"><div class="card"><h2>Enquiries per day <small>${m.length} this month</small></h2><div class="days">${days.map(([i,v])=>`<div class="${i===dd?'today':''}">${v||''}<i style="height:${v/mx*82}%"></i></div>`).join('')}</div><div class="dlab">${days.map(([i])=>`<span>${i}</span>`).join('')}</div></div>
+ <div class="card"><h2>Enquiry workload per seller</h2><div class="scroll"><table class="num"><tr><th>Seller</th><th>Today</th><th>MTD</th><th>Open now</th><th>Tier A open</th><th>Load</th></tr>${sellers.map(p=>{const a=E.filter(e=>e.seller===p.code),o=a.filter(isOpen);return`<tr><td><b>${esc(p.name)}</b> ${p.code}</td><td>${a.filter(e=>today(e.received)).length}</td><td>${a.filter(e=>mtd(e.received)).length}</td><td>${o.length}</td><td>${o.filter(e=>tier(e)==='A').length}</td><td><span class="pill ${o.length>5?'bad':o.length>2?'warn':'ok'}">${o.length>5?'High':o.length>2?'Medium':'OK'}</span></td></tr>`}).join('')}</table></div>
+ <p class="note">A seller sees only their own row. An RM sees the region. Management sees all three regions.</p></div></div></div>`}
+
+function vInter(){const R=visR().filter(r=>mtd(r.sentAt)),sellers=sellersInScope(),nf=R.filter(r=>rst(r).nofb).sort((a,b)=>rst(b).h-rst(a).h);
+ const fr=R.filter(r=>r.acceptedAt||r.returnedAt).map(r=>biz(r.sentAt,r.acceptedAt||r.returnedAt)),fa=avg(fr);
+ if(!S.selReq||!S.req.get(S.selReq))S.selReq=nf[0]?nf[0].id:(R[0]?R[0].id:null);const sr=S.selReq&&S.req.get(S.selReq);
+ const dept=DN.map(d=>{const a=R.filter(r=>r.dept===d),s=a.map(rst),t=avg(a.filter(r=>r.acceptedAt||r.returnedAt).map(r=>biz(r.sentAt,r.acceptedAt||r.returnedAt)));
+  return`<tr><td><b>${d}</b></td><td>${a.length}</td><td>${s.filter(x=>x.b==='done').length}</td><td>${s.filter(x=>x.b!=='done'&&!x.nofb).length}</td><td>${s.filter(x=>x.nofb).length?`<b style="color:var(--bad)">${s.filter(x=>x.nofb).length}</b>`:0}</td><td>${t==null?'–':hrs(t)}</td><td>${a.reduce((n,r)=>n+(r.nudges||0),0)}</td></tr>`}).join('');
+ return`<div class="top"><div><h1>Interactions &ndash; ${esc(scopeName())} with other teams</h1><div class="sub">Where a request got no feedback or hand-back, with a live log on every request</div></div>${regionSel()}</div>
+ <div class="row">${kpi('Requests sent MTD',R.length,sellers.length+' sellers to '+DN.length+' teams')}${kpi('Got feedback',R.length-nf.length,pct(R.length-nf.length,R.length)+' answered')}${kpi('No feedback yet',nf.length,'no accept, reject or comment',nf.length)}${kpi('Avg first response',fa==null?'–':hrs(fa),'Target '+SLA.nofb+' h to accept')}${kpi('Longest silence',nf[0]?hrs(rst(nf[0]).h):'–',nf[0]?esc(nf[0].dept):'')}</div>
+ <div class="grid2"><div class="col"><div class="card"><h2>Seller &times; team <small>red badge = no feedback yet</small></h2><div class="scroll"><table class="num"><tr><th>Seller</th>${DN.map(d=>`<th>${d.replace('Sales Support','Support')}</th>`).join('')}</tr>${sellers.map(p=>`<tr><td><b>${esc(p.name)}</b> ${p.code}</td>${DN.map(d=>{const a=R.filter(r=>r.seller===p.code&&r.dept===d),x=a.filter(r=>rst(r).nofb).length;return`<td>${a.length||'·'}${x?`<span class="nf">${x}</span>`:''}</td>`}).join('')}</tr>`).join('')}</table></div></div>
+ <div class="card"><h2>Team responsiveness <small>how each team hands back to sales</small></h2><div class="scroll"><table class="num"><tr><th>Team</th><th>Received</th><th>Handed back</th><th>In progress</th><th>No feedback</th><th>Avg 1st response</th><th>Nudges</th></tr>${dept}</table></div></div></div>
+ <div class="col"><div class="card"><h2>No feedback yet <small>longest silence first</small></h2>${nf.length?`<div class="scroll"><table><tr><th>Index no.</th><th>To</th><th>From</th><th>Silent</th><th></th></tr>${nf.map(r=>`<tr class="click" data-a="pickReq" data-id="${r.id}" tabindex="0"><td class="mono">${esc(r.enqNo)}</td><td>${esc(r.dept)}</td><td>${esc(r.seller)}</td><td><span class="pill ${rst(r).rm?'bad':'warn'}">${hrs(rst(r).h)}</span></td><td>${canW()?`<button class="b g s" data-a="rNudge" data-id="${r.id}">Nudge</button>`:''}</td></tr>`).join('')}</table></div><p class="note">Silent over ${SLA.nofb} business hours: reminder to the team. Over one business day: flagged to the RM.</p>`:'<p class="note">Every request has an answer.</p>'}</div>
+ <div class="card"><h2>Live log ${sr?`<small><span class="mono">${esc(sr.enqNo)}</span> &middot; ${esc(sr.dept)}</small>`:''}</h2>${sr?`<p style="margin:0 0 6px">${esc(sr.title)} <span class="pill ${rst(sr).cls||'mute'}">${esc(rst(sr).t)}</span></p>${log(sr.log,10)}`:'<p class="note">Pick a request to read its log.</p>'}</div></div></div>`}
+
+function vQuote(){const E=visE().filter(isOpen),q=S.q,e=S.enq.get(q.enqId),cat=[...S.cat.values()].filter(c=>c.mode===q.tpl||c.mode==='Service');
+ const lines=q.lines.map((l,i)=>{const c=S.cat.get(l.cat);return c?{i,c,qty:l.qty,total:c.price*l.qty}:null}).filter(Boolean),tot=lines.reduce((s,l)=>s+l.total,0),out=visE().filter(x=>x.quote);
+ return`<div class="top"><div><h1>Quotations</h1><div class="sub">Two shared templates, Sale and Rental. Prices come from the shared price list.</div></div></div>
+ <div class="grid2"><div class="card"><h2>Build a quotation ${e?`<small class="mono">${esc(e.enqNo)} rev.${(e.quote?e.quote.rev:0)+1}</small>`:''}</h2>
+ <div class="row" style="margin-bottom:8px"><select id="qEnq" data-c="qEnq" aria-label="Enquiry"><option value="">Choose an enquiry&hellip;</option>${E.map(x=>`<option value="${x.id}"${q.enqId===x.id?' selected':''}>${esc(x.enqNo+' · '+x.customer)}</option>`).join('')}</select><select id="qTpl" data-c="qTpl" aria-label="Template"><option${q.tpl==='Sale'?' selected':''}>Sale</option><option${q.tpl==='Rental'?' selected':''}>Rental</option></select></div>
+ ${e?`<div class="kv" style="margin-bottom:8px"><span>Customer</span><b>${esc(e.customer)} &middot; ${esc(e.contact||'')}</b><span>Need</span><b>${esc(e.product)}</b></div>`:''}
+ <div class="scroll"><table><tr><th>Item</th><th>Qty</th><th>Unit price</th><th>Total</th><th></th></tr>${lines.map(l=>`<tr><td>${esc(l.c.item)}<br><span class="note">${esc(l.c.unit||'')}</span></td><td><input type="number" min="1" style="width:74px" id="qq_${l.i}" data-c="qQty" data-n="${l.i}" value="${l.qty}" aria-label="Quantity"></td><td class="mono">${rp(l.c.price)}</td><td class="mono">${rp(l.total)}</td><td><button class="b g s" data-a="qDel" data-n="${l.i}" aria-label="Remove line">&times;</button></td></tr>`).join('')||'<tr><td colspan="5" class="note">No lines yet. Add one from the catalog.</td></tr>'}
+ <tr><td colspan="3" style="text-align:right"><b>Subtotal</b></td><td class="mono"><b>${rp(tot)}</b></td><td></td></tr></table></div>
+ <div class="row" style="margin-top:8px"><select id="qCat" aria-label="Catalog item">${cat.map(c=>`<option value="${c.id}">${esc(c.item)} &ndash; ${rp(c.price)}</option>`).join('')}</select><button class="b g" data-a="qAdd">+ Add line</button><button class="b" data-a="qSave">Save and mark as sent</button></div>
+ <p class="note">${q.tpl==='Rental'?'Rental adds period, deposit and return conditions. ':''}Validity 14 days. Custom items go to the estimator and then join the catalog. Dummy prices.</p></div>
+ <div class="card"><h2>Quotes out <small>${out.length}</small></h2>${out.length?`<div class="scroll"><table><tr><th>Index no.</th><th>Customer</th><th>Total</th><th>Status</th><th>SLA</th></tr>${out.map(x=>`<tr class="click" data-a="open" data-id="${x.id}" tabindex="0"><td class="mono">${esc(x.enqNo)}</td><td>${esc(x.customer)}</td><td class="mono">${rpS(x.quote.total)}</td><td>${stPill(x)}</td><td>${slaPill(x)}</td></tr>`).join('')}</table></div>`:'<p class="note">No quotations yet.</p>'}</div></div>`}
+
+function vMgmt(){const E=[...S.enq.values()],lost=E.filter(e=>e.status==='Lost'),m=E.filter(e=>mtd(e.received)),op=E.filter(isOpen);
+ const fc=avg(E.filter(e=>e.contactedAt).map(e=>biz(e.received,e.contactedAt))),br=op.filter(e=>sla(e).bad);
+ const rows=Object.keys(REGIONS).map(r=>{const a=E.filter(e=>e.region===r),am=a.filter(e=>mtd(e.received)),f=avg(a.filter(e=>e.contactedAt).map(e=>biz(e.received,e.contactedAt))),wn=a.filter(e=>e.status==='Won'),ls=a.filter(e=>e.status==='Lost').length,b=a.filter(e=>isOpen(e)&&sla(e).bad),rm=PEOPLE.find(p=>p.region===r&&p.role==='rm');
+  return`<tr><td><b>${r}</b> ${REGIONS[r]}<br><span class="note">RM ${esc(rm.name)}</span></td><td>${am.length}</td><td>${pct(am.filter(e=>tier(e)==='A').length,am.length)}</td><td>${f==null?'–':hrs(f)}</td><td>${a.filter(e=>e.quote).length}</td><td>${pct(wn.length,wn.length+ls)}</td><td>${rpS(wn.reduce((s,e)=>s+(e.quote?e.quote.total:0),0))}</td><td>${b.filter(e=>P[e.seller].role!=='rm').length} / ${b.filter(e=>P[e.seller].role==='rm').length}</td></tr>`}).join('');
+ const lr=LOSS.map(l=>[l,lost.filter(e=>e.lossReason===l).length]).sort((a,b)=>b[1]-a[1]),lm=Math.max(1,...lr.map(x=>x[1])),sm=SOURCES.map(s=>[s,m.filter(e=>e.source===s).length]),smx=Math.max(1,...sm.map(x=>x[1]));
+ return`<div class="top"><div><h1>Company sales &ndash; all regions</h1><div class="sub">View only. ${fT(now())} WIB</div></div><span class="pill mute">Read only</span></div>
+ <div class="row">${kpi('Enquiries MTD',m.length,'Tier A '+m.filter(e=>tier(e)==='A').length)}${kpi('Quotes out',op.filter(e=>e.stage==='Quote sent').length,rpS(op.filter(e=>e.stage==='Quote sent').reduce((s,e)=>s+(e.quote?e.quote.total:0),0)))}${kpi('POs won',E.filter(e=>e.status==='Won').length,rpS(E.filter(e=>e.status==='Won').reduce((s,e)=>s+(e.quote?e.quote.total:0),0)))}${kpi('Avg first contact',fc==null?'–':hrs(fc),'Target '+SLA.contact+' h')}${kpi('Open SLA breaches',br.length,'sellers and RMs',br.length)}</div>
+ <div class="grid2"><div class="col"><div class="card"><h2>Region comparison <small>same rules for every region</small></h2><div class="scroll"><table class="num"><tr><th>Region</th><th>Enq. MTD</th><th>Tier A</th><th>Avg 1st contact</th><th>Quotes</th><th>Win rate</th><th>PO value</th><th>Breaches seller / RM</th></tr>${rows}</table></div></div>
+ <div class="card"><h2>Loss reasons <small>required on every lost enquiry</small></h2>${lost.length?lr.map(([l,n])=>`<div class="hb" style="grid-template-columns:120px minmax(0,1fr) 32px"><span>${l}</span><div class="trk"><i class="sD" style="width:${n/lm*100}%"></i></div><b>${n}</b></div>`).join(''):'<p class="note">No lost enquiries yet.</p>'}</div></div>
+ <div class="col"><div class="card"><h2>Enquiry source mix <small>month to date</small></h2>${sm.map(([l,n])=>`<div class="hb"><span>${l}</span><div class="trk"><i class="sD" style="width:${n/smx*100}%"></i></div><b>${n}</b></div>`).join('')}</div>
+ <div class="card"><h2>What management can do here</h2><ul class="chk"><li>See every region, seller and RM number</li><li>Open any enquiry and read its log</li><li>Not reassign, approve or edit: that stays with the RM</li></ul></div></div></div>`}
+
+const VIEWS={desk:vDesk,enq:vEnq,region:vRegion,hub:vHub,work:vWork,inter:vInter,quote:vQuote,mgmt:vMgmt};
+
+/* ---------- frame ---------- */
+function head(){const roles=[['sales','Sales'],['rm','Regional Manager'],['mgmt','Management'],['support','Support team']];
+ $('#selRole').innerHTML=roles.map(([v,l])=>`<option value="${v}"${S.role===v?' selected':''}>${l}</option>`).join('');
+ const opts=S.role==='support'?DN.map(d=>[d,d]):S.role==='mgmt'?[['MGT','Director']]:PEOPLE.filter(p=>S.role==='rm'?p.role==='rm':true).map(p=>[p.code,p.name+' · '+p.region]);
+ if(!opts.some(o=>o[0]===S.who))S.who=opts[0][0];
+ $('#selWho').innerHTML=opts.map(([v,l])=>`<option value="${v}"${S.who===v?' selected':''}>${esc(l)}</option>`).join('');
+ if(!TABS[S.role].some(t=>t[0]===S.tab))S.tab=TABS[S.role][0][0];
+ $('#nav').innerHTML=TABS[S.role].map(([k,l])=>`<button data-a="tab" data-k="${k}" class="${S.tab===k?'on':''}">${l}</button>`).join('');
+ $('#clock').innerHTML=S.cfg.demoNow?`<button class="b g s" data-a="live" style="color:var(--rail-ink);box-shadow:inset 0 0 0 1px #3a5876">${S.live?'Live clock on':'Demo clock '+fT(S.cfg.demoNow)}</button>`:''}
+function render(){const loaded=S.nodb||(S.got.enquiries&&S.got.requests&&S.got.catalog),m=$('#main');
+ if(!loaded){m.innerHTML=`<div class="empty"><h1>Opening the yard</h1><p>${S.slow?'The shared data cannot be reached yet. Still trying.':'Loading shared data…'}</p></div>`;return}
+ const act=document.activeElement,fid=act&&act.id&&m.contains(act)?act.id:null,pos=fid&&act.selectionStart;
+ let h='';
+ if(S.nodb)h+=`<div class="info"><span>Shared database is not available in this view. Anything you change stays on this screen only.</span></div>`;
+ if(!S.enq.size)h+=`<div class="empty"><h1>No enquiries yet</h1><p>This is where enquiries, requests and quotations will appear.</p><div class="row" style="justify-content:center;margin-top:12px"><button class="b" data-a="seed">Load sample data</button>${canW()?'<button class="b g" data-a="newEnq">Log the first enquiry</button>':''}</div></div>`;
+ else h+=(S.sel&&['enq','desk','region','quote','mgmt','hub','inter','work'].includes(S.tab)&&S.showDetail)?vDetail():VIEWS[S.tab]();
+ m.innerHTML=h;
+ if(fid){const el=document.getElementById(fid);if(el){el.focus();if(pos!=null&&el.setSelectionRange)try{el.setSelectionRange(pos,pos)}catch(e){}}}}
+
+/* ---------- modal ---------- */
+function openM(title,html,ok){$('#mT').textContent=title;$('#mB').innerHTML=html;$('#mOkBtn').hidden=!ok;$('#mOkBtn').textContent=ok||'';$('#mCancel').textContent=ok?'Cancel':'Close';$('#modal').hidden=false;const f=$('#mB input,#mB select,#mB textarea,#mB button')||$('#mCancel');f.focus()}
+function closeM(){$('#modal').hidden=true;S.form=null}
+function form(title,fields,onOk,note,ok='Save'){S.form={fields,onOk};openM(title,(note?`<p class="note" style="margin-top:0">${note}</p>`:'')+fields.map(f=>{const id='f_'+f.k,lab=`<label for="${id}">${esc(f.label)}</label>`;
+ if(f.type==='select')return`<div class="fr">${lab}<select id="${id}">${f.opts.map(o=>{const[v,l]=Array.isArray(o)?o:[o,o];return`<option value="${esc(v)}"${v===f.val?' selected':''}>${esc(l)}</option>`}).join('')}</select></div>`;
+ if(f.type==='check')return`<div class="fr ck"><input type="checkbox" id="${id}"${f.val?' checked':''}>${lab}</div>`;
+ if(f.type==='area')return`<div class="fr">${lab}<textarea id="${id}" rows="3">${esc(f.val||'')}</textarea></div>`;
+ return`<div class="fr">${lab}<input id="${id}" type="${f.type||'text'}" value="${esc(f.val??'')}"></div>`}).join('')+'<p id="mE" class="err" hidden></p>',ok)}
+const mErr=t=>{const e=$('#mE');if(e){e.textContent=t;e.hidden=false}};
+
+/* ---------- actions ---------- */
+const A={
+ mX:closeM,
+ mOk(){const f=S.form;if(!f)return;const v={};for(const x of f.fields){const el=$('#f_'+x.k);v[x.k]=x.type==='check'?el.checked:el.value.trim()}
+  for(const x of f.fields)if(x.req&&!v[x.k])return mErr(x.label+' is required.');const r=f.onOk(v);if(typeof r==='string')return mErr(r);if(r!==false)closeM()},
+ tab(d){S.tab=d.k;S.showDetail=false;head();draw()},
+ open(d){S.sel=d.id;S.showDetail=true;closeM();draw();window.scrollTo(0,0)},
+ back(){S.showDetail=false;draw()},
+ live(){S.live=!S.live;head();draw()},
+ pickReq(d){S.selReq=d.id;draw()},
+ seed(){fetch('seed.json').then(r=>r.json()).then(async j=>{S.cfg=j.meta.config;if(S.db&&canW())await S.db.doc('meta/config').set(S.cfg).catch(()=>{});for(const col of['catalog','enquiries','requests'])for(const[id,doc]of Object.entries(j[col]))await put(col,{...doc,id});head();toast('Sample data loaded')}).catch(()=>toast('Sample data could not be loaded here.'))},
+ newEnq(){const sellers=S.role==='sales'?[[S.who,me().name]]:sellersInScope().map(p=>[p.code,p.name]);
+  form('Log an enquiry',[{k:'source',label:'Source',type:'select',opts:SOURCES,val:S.role==='sales'?'WhatsApp':'Central'},{k:'customer',label:'Company',req:1},{k:'contact',label:'Contact person'},{k:'phone',label:'Phone'},{k:'email',label:'Email'},{k:'line',label:'Business line',type:'select',opts:['Container','Modular','Modification']},{k:'type',label:'Retail or project',type:'select',opts:['Retail','Project']},{k:'product',label:'Product needed',req:1},{k:'location',label:'Location'},{k:'qty',label:'Quantity'},{k:'seller',label:'Assign to',type:'select',opts:sellers,val:sellers[0][0]}],v=>{
+   const dups=[...S.enq.values()].filter(x=>sameCust(x,v)&&(isOpen(x)||(now()-+new Date(x.lastUpdate))/D<=SLA.dup));
+   if(dups.length&&!S.dupOk){S.pending=v;openM('This customer already has an enquiry',`<p style="margin-top:0">Found by email, phone or company name within the ${SLA.dup}-day window. A resend is not a new enquiry.</p><ul class="chk">${dups.map(x=>`<li><span><span class="mono">${esc(x.enqNo)}</span> ${stPill(x)}<br><span class="note">${esc(x.product)} &middot; owner ${esc(x.seller)}</span></span><button class="b s" style="margin-left:auto" data-a="dupLog" data-id="${x.id}">Log as resend here</button></li>`).join('')}</ul><div class="row" style="margin-top:10px"><button class="b g" data-a="dupNew">It is a new need: create a linked enquiry</button></div>`);return false}
+   createEnq(v)},'Direct emails and WhatsApp enquiries must be logged. Logging counts in the KPI.','Create enquiry')},
+ dupLog(d){const v=S.pending;upE(d.id,null,'Resend received via '+v.source+' ('+v.product+'). Logged as duplicate, no new number.',false);S.pending=null;closeM();toast('Logged on the existing enquiry')},
+ dupNew(){const v=S.pending;S.pending=null;createEnq(v,true);closeM()},
+ contacted(d){form('Mark contacted',[{k:'how',label:'Channel',type:'select',opts:['WhatsApp','Call','Email','Visit']},{k:'note',label:'What was said',type:'area',req:1},{k:'proof',label:'Proof reference (screenshot or email subject)'}],v=>{upE(d.id,e=>{e.status='Contacted';e.stage='KYC';e.contactedAt=iso(now())},`First contact by ${v.how}: ${v.note}${v.proof?' · proof: '+v.proof:''}`)})},
+ status(d){const e=S.enq.get(d.id);form('Update status',[{k:'status',label:'Status',type:'select',opts:STATUS.filter(s=>s!=='New'),val:e.status==='New'?'Contacted':e.status},{k:'reason',label:'Loss reason (required when Lost)',type:'select',opts:[['','–'],...LOSS.map(l=>[l,l])]},{k:'note',label:'Comment: what are we waiting for, what changed',type:'area',req:1}],v=>{
+   if(v.status==='Lost'&&!v.reason)return'Pick a loss reason.';
+   upE(d.id,x=>{x.status=v.status;if(!x.contactedAt&&v.status!=='New')x.contactedAt=iso(now());if(v.status==='Lost')x.lossReason=v.reason;if(v.status==='Won'&&!WON.includes(x.stage))x.stage='PO received';if(v.status==='Contacted'&&(!x.stage||x.stage==='New'))x.stage='KYC'},`Status: ${v.status}${v.status==='Lost'?' ('+v.reason+')':''}. ${v.note}`)})},
+ comment(d){form('Log a follow-up',[{k:'note',label:'What happened, and what changed in the deal',type:'area',req:1},{k:'proof',label:'Proof reference (WhatsApp screenshot or email)'}],v=>{upE(d.id,null,'Follow-up: '+v.note+(v.proof?' · proof: '+v.proof:''))})},
+ reopen(d){upE(d.id,e=>{e.status='Ongoing';delete e.lossReason},'Reopened: customer came back. Same index number.')},
+ flag(d){upE(d.id,e=>{e.redFlags=Math.max(0,(e.redFlags||0)+(+d.n))},null,false)},
+ toQuote(d){S.q={enqId:d.id,tpl:'Sale',lines:[]};S.tab='quote';S.showDetail=false;head();draw()},
+ sendReq(d){const e=S.enq.get(d.id);form('Send a request to a team',[{k:'dept',label:'Team',type:'select',opts:DN},{k:'title',label:'What you need: product, size, quantity, site, special requirements',type:'area',req:1},{k:'catalog',label:'I checked the catalog and no standard design fits',type:'check'},{k:'urgent',label:'Urgent (next day). Needs RM approval',type:'check'}],v=>{
+   const big=v.dept==='Drafter'||v.dept==='Estimator';
+   if(big&&!(e.kyc&&e.kyc.identity))return'Identity gate: confirm the person, company and contact before asking the '+v.dept.toLowerCase()+'.';
+   if(v.dept==='Drafter'){const t=tier(e);if(t==='C'||t==='P')return'Tier C and price-check enquiries use the catalog only.';if(!v.catalog)return'Check the catalog first, then tick the box.'}
+   const id=nid('r'),n=iso(now());put('requests',{id,enqId:e.id,enqNo:e.enqNo,dept:v.dept,seller:e.seller,region:e.region,title:v.title,urgent:v.urgent,status:v.urgent?'pending':'sent',sentAt:n,nudges:0,log:[{t:n,who:actor(),text:'Request sent to '+v.dept+(v.urgent?'. Urgent, waiting for RM approval.':'.')}]});
+   upE(e.id,x=>{if(big)x.stage=v.dept;if(x.status==='Contacted')x.status='Ongoing'},'Request sent to '+v.dept+': '+v.title)},'Minimum lead time: drafter 3 days, estimator 2 days. Incomplete requests are sent back.','Send request')},
+ poSend(d){const e=S.enq.get(d.id),miss=PO.filter(([k])=>!(e.po&&e.po[k]));if(miss.length)return toast('Checklist incomplete: '+miss.length+' item(s) missing');upE(d.id,x=>{x.stage='WO approval'},'PO handover package sent to RM for approval.')},
+ nextStage(d){const e=S.enq.get(d.id),nx=WON[WON.indexOf(e.stage)+1];upE(d.id,x=>{x.stage=nx},'Stage moved to '+nx+'.')},
+ reassign(d){const to=$('#ra_'+d.id).value,e=S.enq.get(d.id);upE(d.id,x=>{x.firstOwner=x.firstOwner||x.seller;x.seller=to},`Reassigned from ${e.seller} to ${to}: no contact after ${SLA.reassign} business hours. Index number unchanged.`,false);[...S.req.values()].filter(r=>r.enqId===d.id).forEach(r=>upR(r.id,x=>{x.seller=to}))},
+ closeLost(d){upE(d.id,x=>{x.status='Lost';x.lossReason='No response'},`Closed as lost: no response for ${SLA.lost} days. Can be reopened.`)},
+ apprReq(d){upR(d.id,r=>{r.status='sent';r.rmApproved=true;r.sentAt=iso(now())},'Urgent request approved by RM. Sent to '+S.req.get(d.id).dept+'.')},
+ rejReq(d){upR(d.id,r=>{r.status='rejected';r.reason='Urgent not approved'},'Urgent request not approved by RM. Resend with the normal lead time.')},
+ apprPO(d){upE(d.id,x=>{x.stage='WO / Kickoff'},'PO package approved by RM. Work order and kickoff requested from Sales Support.');const e=S.enq.get(d.id),id=nid('r'),n=iso(now());put('requests',{id,enqId:e.id,enqNo:e.enqNo,dept:'Sales Support',seller:e.seller,region:e.region,title:'Work order and kickoff meeting',urgent:false,status:'sent',sentAt:n,nudges:0,log:[{t:n,who:actor(),text:'Work order and kickoff requested after RM approval.'}]})},
+ rAccept(d){const r=S.req.get(d.id);upR(d.id,x=>{x.status='accepted';x.acceptedAt=iso(now());x.due=iso(addBizDays(now(),DEPTS[r.dept].days))},`Accepted by ${r.dept}. Due in ${DEPTS[r.dept].days} business day(s).`)},
+ rReturn(d){const r=S.req.get(d.id);form('Hand back to sales',[{k:'note',label:'What you are handing back (drawing, price, schedule, answer)',type:'area',req:1}],v=>{upR(d.id,x=>{x.status='returned';x.returnedAt=iso(now())},'Handed back: '+v.note);const e=S.enq.get(r.enqId);if(e)upE(e.id,null,r.dept+' handed back: '+v.note,false)},null,'Hand back')},
+ rReject(d){form('Reject this request',[{k:'reason',label:'Reason',type:'select',opts:['Unclear request','Missing information','Unrealistic timeline','Not in scope']},{k:'note',label:'What sales must fix',type:'area',req:1}],v=>{upR(d.id,x=>{x.status='rejected';x.reason=v.reason;x.returnedAt=iso(now())},`Rejected (${v.reason}): ${v.note}`)},null,'Reject')},
+ rRedirect(d){upR(d.id,x=>{x.status='redirected';x.returnedAt=iso(now())},'Redirected to the drawing catalog: a standard design fits.')},
+ rNudge(d){upR(d.id,x=>{x.nudges=(x.nudges||0)+1},'Nudge sent: please confirm status.');toast('Nudge logged')},
+ rLog(d){const r=S.req.get(d.id);openM(r.dept+' request · '+r.enqNo,`<p style="margin-top:0">${esc(r.title)} <span class="pill ${rst(r).cls||'mute'}">${esc(rst(r).t)}</span></p>${log(r.log,20)}`)},
+ qAdd(){const c=$('#qCat').value;if(c){S.q.lines.push({cat:c,qty:1});draw()}},
+ qDel(d){S.q.lines.splice(+d.n,1);draw()},
+ qSave(){const q=S.q,e=S.enq.get(q.enqId);if(!e)return toast('Choose an enquiry first');if(!q.lines.length)return toast('Add at least one line');const lines=q.lines.map(l=>{const c=S.cat.get(l.cat);return{item:c.item,qty:l.qty,price:c.price}}),total=lines.reduce((s,l)=>s+l.qty*l.price,0),rev=(e.quote?e.quote.rev:0)+1;
+  upE(e.id,x=>{x.quote={tpl:q.tpl,rev,lines,total};x.stage='Quote sent';x.status='Ongoing';if(!x.contactedAt)x.contactedAt=iso(now())},`Quotation rev.${rev} (${q.tpl}) sent: ${rp(total)}.`);S.q={enqId:'',tpl:'Sale',lines:[]};toast('Quotation saved and marked as sent')}
+};
+function createEnq(v,linked){const p=P[v.seller],t=now(),id=nid('e'),enqNo=mint(p.region,p.code,t),n=iso(t);
+ const e={id,enqNo,received:n,lastUpdate:n,source:v.source,customer:v.customer,contact:v.contact,phone:v.phone,email:v.email,line:v.line,type:v.type,product:v.product,location:v.location,qty:v.qty,region:p.region,seller:p.code,firstOwner:p.code,status:'New',stage:'New',redFlags:0,kyc:{identity:!!(v.customer&&v.contact&&(v.phone||v.email)),need:!!v.product,qty:!!v.qty,location:!!v.location},log:[{t:n,who:actor(),text:'Enquiry logged from '+v.source+(linked?'. Linked to an existing customer.':'.')+' Index number '+enqNo+'.'}]};
+ e.intakeScore=e.score=score(e);e.tier=tier(e);put('enquiries',e);S.sel=id;S.showDetail=true;toast('Created '+enqNo)}
+const C={
+ role(el){S.role=el.value;S.tab=TABS[S.role][0][0];S.showDetail=false;S.regionF='';head();keep();draw()},
+ who(el){S.who=el.value;S.showDetail=false;keep();head();draw()},
+ regionF(el){S.regionF=el.value;draw()},
+ fStatus(el){S.fStatus=el.value;draw()},
+ kyc(el,d){upE(d.id,e=>{e.kyc={...(e.kyc||{}),[d.k]:el.checked}},null,false)},
+ pc(el,d){upE(d.id,e=>{e.priceCheck=el.checked},el.checked?'Moved to the price-check track: catalog price range only.':'Moved back to the normal track.',false)},
+ po(el,d){upE(d.id,e=>{e.po={...(e.po||{}),[d.k]:el.checked}},null,false)},
+ qEnq(el){S.q.enqId=el.value;draw()},
+ qTpl(el){S.q.tpl=el.value;S.q.lines=[];draw()},
+ qQty(el,d){S.q.lines[+d.n].qty=Math.max(1,parseInt(el.value,10)||1);draw()}
+};
+document.addEventListener('click',ev=>{const el=ev.target.closest('[data-a]');if(!el)return;const f=A[el.dataset.a];if(f){if(el.tagName==='A')ev.preventDefault();ev.stopPropagation();f(el.dataset,el)}});
+document.addEventListener('change',ev=>{const el=ev.target.closest('[data-c]');if(el&&C[el.dataset.c])C[el.dataset.c](el,el.dataset)});
+document.addEventListener('input',ev=>{const el=ev.target.closest('[data-i]');if(el&&el.dataset.i==='filter'){S.filter=el.value;draw()}});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&!$('#modal').hidden)closeM();if(ev.key==='Enter'&&ev.target.matches('tr.click'))ev.target.click()});
+$('#modal').addEventListener('click',ev=>{if(ev.target.id==='modal')closeM()});
+
+/* ---------- boot ---------- */
+head();
+const use=window.claude&&typeof window.claude.use==='function'?window.claude.use('db'):Promise.resolve(null);
+setTimeout(()=>{if(!S.nodb&&!S.got.enquiries){S.slow=true;draw()}},10000);
+use.then(db=>{if(!db){S.nodb=true;draw();return}S.db=db;
+ const fail=e=>{if(!S.got.enquiries){S.nodb=true;S.db=null}toast('Shared data stopped updating ('+((e&&e.code)||'error')+').');draw()};
+ for(const col of['enquiries','requests','catalog'])db.collection(col).onSnapshot(s=>{const m=MAP[col]();m.clear();s.docs.forEach(d=>m.set(d.id,{...d.data(),id:d.id}));S.got[col]=1;draw()},fail);
+ db.doc('meta/config').onSnapshot(s=>{S.cfg=s.exists?s.data():{};head();draw()},()=>{})
+}).catch(()=>{S.nodb=true;draw()});
+})();
+</script>
